@@ -24,9 +24,10 @@
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        style="@style/ThemeOverlay.Material3.FloatingActionButton.Primary"
+        android:layout_marginStart="@dimen/button_marginStart_main"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/button_margin_end_main"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
@@ -36,18 +37,19 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_22sp"
-        app:cornerRadius="16dp"
+        app:cornerRadius="@dimen/button_radius_main"
         app:icon="@drawable/ic_search_vector"
         app:iconGravity="textStart"
-        app:iconPadding="8dp"
-        app:iconTint="@color/black" />
+        app:iconPadding="@dimen/button_padding_main"
+        app:iconTint="@color/black"
+        />
 
     <Button
         android:id="@+id/music"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/button_marginStart_main"
+        android:layout_marginEnd="@dimen/button_margin_end_main"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
@@ -57,18 +59,18 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_22sp"
-        app:cornerRadius="16dp"
+        app:cornerRadius="@dimen/button_radius_main"
         app:icon="@drawable/ic_music_vector"
         app:iconGravity="textStart"
-        app:iconPadding="8dp"
+        app:iconPadding="@dimen/button_padding_main"
         app:iconTint="@color/black" />
 
     <Button
         android:id="@+id/setting"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/button_marginStart_main"
+        android:layout_marginEnd="@dimen/button_margin_end_main"
         android:layout_marginBottom="28dp"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
@@ -78,10 +80,10 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_22sp"
-        app:cornerRadius="16dp"
+        app:cornerRadius="@dimen/button_radius_main"
         app:icon="@drawable/ic_settings_vector"
         app:iconGravity="textStart"
-        app:iconPadding="8dp"
+        app:iconPadding="@dimen/button_padding_main"
         app:iconTint="@color/black" />
 
 </LinearLayout>

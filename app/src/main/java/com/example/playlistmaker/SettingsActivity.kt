@@ -1,17 +1,19 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-
-        val backButton = findViewById<ImageButton>(R.id.back)
-        backButton.setOnClickListener {
-            finish()
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.back.setOnClickListener{
+            val backIntent = Intent(this, MainActivity::class.java)
+            startActivity(backIntent)
         }
     }
 }
