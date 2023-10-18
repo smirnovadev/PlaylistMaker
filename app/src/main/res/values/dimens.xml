@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_horizontal__settings_menu_option">16dp</dimen>
+    <dimen name="padding_vertical__settings_menu_option">20dp</dimen>
+    <dimen name="settings_option_button_padding">12dp</dimen>
+    <dimen name="button_marginStart_main">16dp</dimen>
+    <dimen name="button_margin_end_main">16dp</dimen>
+    <dimen name="button_radius_main">16dp</dimen>
+    <dimen name="button_padding_main">8dp</dimen>
+</resources>
