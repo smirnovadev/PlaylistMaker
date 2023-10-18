@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
@@ -11,9 +12,35 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.back.setOnClickListener{
+        binding.toolbar.setTitle(R.string.setting)
+
+        binding.toolbar.setNavigationOnClickListener {
             val backIntent = Intent(this, MainActivity::class.java)
             startActivity(backIntent)
+        }
+
+        binding.share.setOnClickListener{
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.offer))
+            startActivity(shareIntent)
+        }
+
+        binding.support.setOnClickListener{
+            val message = "Спасибо разработчикам и разработчицам за крутое приложение!"
+            val supportIntent = Intent(Intent.ACTION_SENDTO)
+            supportIntent.data = Uri.parse("mailto:")
+            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("annaparfenova514@gmail.com"))
+            supportIntent.putExtra(Intent.EXTRA_TEXT, message)
+            supportIntent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение разработчикам и разработчицам за крутое приложение!")
+            startActivity(supportIntent)
+        }
+
+        binding.agreement.setOnClickListener{
+            val url = "https://yandex.ru/legal/practicum_offer/"
+            val openIntent = Intent(Intent.ACTION_VIEW)
+            openIntent.data = Uri.parse(url)
+            startActivity(openIntent)
         }
     }
 }

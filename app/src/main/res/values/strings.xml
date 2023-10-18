@@ -1,15 +1,17 @@
 <resources>
     <string name="app_name">PlaylistMaker</string>
     <string name="playlist_maker">Playlist maker</string>
-    <string name="Search">Поиск</string>
-    <string name="Media_library">Медиатека</string>
-    <string name="Setting">Настройки</string>
+    <string name="search">Поиск</string>
+    <string name="media_library">Медиатека</string>
+    <string name="setting">Настройки</string>
     <string name="dark_theme">Темная тема</string>
     <string name="Share_app">Поделиться приложением</string>
-    <string name="Write_to_support">Написать в поддержку</string>
-    <string name="Terms_of_use">Пользовательское соглашение</string>
+    <string name="write_to_support">Написать в поддержку</string>
+    <string name="terms_of_use">Пользовательское соглашение</string>
     <string name="back_button_content_desc">back button</string>
     <string name="share_button_content_desc">share button</string>
     <string name="contact_support_content_desc">contact support</string>
     <string name="license_agreement_content_desc">license agreement</string>
+    <string name="offer">https://practicum.yandex.ru/profile/android-developer/</string>
+    <string name="clear_text">clear Text</string>
 </resources>
