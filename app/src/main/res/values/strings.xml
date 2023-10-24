@@ -14,4 +14,7 @@
     <string name="license_agreement_content_desc">license agreement</string>
     <string name="offer">https://practicum.yandex.ru/profile/android-developer/</string>
     <string name="clear_text">clear Text</string>
+    <string name="message_to_developers">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="letter_subject">Сообщение разработчикам и разработчицам за крутое приложение!</string>
+    <string name="link_to_offer">https://yandex.ru/legal/practicum_offer/</string>
 </resources>

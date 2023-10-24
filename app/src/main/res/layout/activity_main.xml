@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.PlaylistMaker.MainScreen"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -13,35 +12,43 @@
         android:layout_height="wrap_content"
         app:title="@string/playlist_maker"
         app:titleTextColor="@color/white"
-        tools:context=".MainActivity"
-         />
+        tools:context=".MainActivity" />
 
 
     <Button
         android:id="@+id/search"
         style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/button_marginStart_main"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/button_margin_end_main"
         android:layout_marginBottom="16dp"
+        android:layout_weight="1"
         android:text="@string/search"
         app:icon="@drawable/ic_search_24_black" />
 
     <Button
         android:id="@+id/music"
         style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/button_marginStart_main"
         android:layout_marginEnd="@dimen/button_margin_end_main"
         android:layout_marginBottom="16dp"
+        android:layout_weight="1"
         android:text="@string/media_library"
         app:icon="@drawable/ic_music_vector" />
 
     <Button
         android:id="@+id/setting"
         style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/button_marginStart_main"
         android:layout_marginEnd="@dimen/button_margin_end_main"
         android:layout_marginBottom="28dp"
+        android:layout_weight="1"
         android:text="@string/setting"
         app:icon="@drawable/ic_settings_vector" />
 

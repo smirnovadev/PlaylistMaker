@@ -15,8 +15,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.setTitle(R.string.setting)
 
         binding.toolbar.setNavigationOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            startActivity(backIntent)
+            finish()
         }
 
         binding.share.setOnClickListener{
@@ -27,17 +26,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.support.setOnClickListener{
-            val message = "Спасибо разработчикам и разработчицам за крутое приложение!"
+            val message = getString(R.string.message_to_developers)
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
             supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("annaparfenova514@gmail.com"))
             supportIntent.putExtra(Intent.EXTRA_TEXT, message)
-            supportIntent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение разработчикам и разработчицам за крутое приложение!")
+            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_subject))
             startActivity(supportIntent)
         }
 
         binding.agreement.setOnClickListener{
-            val url = "https://yandex.ru/legal/practicum_offer/"
+            val url = getString(R.string.link_to_offer)
             val openIntent = Intent(Intent.ACTION_VIEW)
             openIntent.data = Uri.parse(url)
             startActivity(openIntent)

@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
@@ -27,8 +26,7 @@ class SearchActivity : AppCompatActivity() {
 
         val toolbar = binding.toolbar
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
         editText.addTextChangedListener(

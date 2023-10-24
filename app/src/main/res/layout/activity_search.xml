@@ -20,37 +20,38 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp">
 
-        <EditText
-            android:maxLines="2"
-            android:importantForAutofill="no"
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
+            android:autofillHints=""
             android:background="@drawable/x_base_search"
+            android:backgroundTint="?attr/colorOnBackground"
             android:drawableStart="@drawable/ic_search_16"
             android:drawablePadding="4dp"
             android:fontFamily="@font/ys_display_regular"
+            android:textColor="@color/black"
             android:hint="@string/search"
+            android:importantForAutofill="no"
             android:inputType="text"
-            android:autofillHints=""
+            android:maxLines="1"
             android:paddingStart="14dp"
             android:paddingEnd="40dp"
             android:textColorHint="?attr/colorSecondaryVariant"
             android:textCursorDrawable="@drawable/search_text_cursor" />
 
         <ImageView
-            android:contentDescription="@string/clear_text"
             android:id="@+id/clearButton"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="14dp"
             android:background="@color/transparent"
-            android:src="@drawable/baseline_close_24"
-            app:tint="@color/gray" />
-
+            android:contentDescription="@string/clear_text"
+            android:src="@drawable/ic_close_24"
+            android:visibility="gone"
+            app:tint="?attr/colorSecondaryVariant"
+            tools:visibility="visible" />
     </FrameLayout>
-
 
 </LinearLayout>
