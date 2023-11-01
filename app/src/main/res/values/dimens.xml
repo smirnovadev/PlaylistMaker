@@ -7,4 +7,10 @@
     <dimen name="button_margin_end_main">16dp</dimen>
     <dimen name="button_radius_main">16dp</dimen>
     <dimen name="button_padding_main">8dp</dimen>
+    <dimen name="track_cover_margin_start_">12dp</dimen>
+    <dimen name="track_name_margin_start">8dp</dimen>
+    <dimen name="track_name_margin_top">6dp</dimen>
+    <dimen name="go_to_track_button_margin_end">12dp</dimen>
+    <dimen name="track_cover_image_size">44dp</dimen>
+    <dimen name="go_to_track_button_size">24dp</dimen>
 </resources>
