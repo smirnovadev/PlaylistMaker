@@ -70,7 +70,7 @@
             android:id="@+id/agreement"
             style="@style/ImageViewSetting"
             android:contentDescription="@string/license_agreement_content_desc"
-            android:src="@drawable/ic_next" />
+            android:src="@drawable/ic_next_24" />
     </FrameLayout>
 
 </LinearLayout>

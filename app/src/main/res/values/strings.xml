@@ -17,4 +17,7 @@
     <string name="message_to_developers">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="letter_subject">Сообщение разработчикам и разработчицам за крутое приложение!</string>
     <string name="link_to_offer">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="format_track_description">%1$s • %2$s</string>
+    <string name="go_to_track_content_desc">go to track</string>
+    <string name="album_cover_content_desc">album cover</string>
 </resources>

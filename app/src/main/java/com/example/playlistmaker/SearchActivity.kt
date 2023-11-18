@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 
 
@@ -44,9 +45,39 @@ class SearchActivity : AppCompatActivity() {
         )
         clearButton.setOnClickListener {
             editText.setText(DEFAULT_TEXT)
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(editText.windowToken, 0)
         }
+
+        val trackList = getTracksFromAssets()
+        val recyclerView = binding.searchRecycler
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = TrackAdapter(trackList)
+    }
+
+    private fun getTracksFromAssets(): MutableList<Track> {
+        val arguments = assets
+            .open("tracks.txt")
+            .bufferedReader()
+            .use { it.readText() }
+            .split("\n")
+            .map { it.trim() }
+        val trackList = mutableListOf<Track>()
+        var i = 0
+        while (i + 3 < arguments.size) {
+            trackList.add(
+                Track(
+                    arguments[i],
+                    arguments[i + 1],
+                    arguments[i + 2],
+                    arguments[i + 3]
+                )
+            )
+            i += 4
+        }
+        return trackList
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
