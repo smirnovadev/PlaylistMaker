@@ -21,13 +21,6 @@
         android:layout_gravity="end|center_vertical"
         android:text="@string/dark_theme"
         app:thumbTint="?attr/colorOnSecondary" />
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/themeSwitcher"
-        android:text="@string/dark_theme"
-        android:layout_marginHorizontal="60dp"
-        android:layout_gravity="start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
     <FrameLayout
         android:layout_width="match_parent"
