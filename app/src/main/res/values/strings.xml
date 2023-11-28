@@ -20,4 +20,8 @@
     <string name="format_track_description">%1$s • %2$s</string>
     <string name="go_to_track_content_desc">go to track</string>
     <string name="album_cover_content_desc">album cover</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="сonnection_problem">Проблема со связью</string>
+    <string name="upload_failed">Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="retry">Обновить</string>
 </resources>

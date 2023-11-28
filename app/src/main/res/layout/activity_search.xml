@@ -30,13 +30,15 @@
             android:drawableStart="@drawable/ic_search_16"
             android:drawablePadding="4dp"
             android:fontFamily="@font/ys_display_regular"
-            android:textColor="@color/black"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="14dp"
             android:paddingEnd="40dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
             android:textColorHint="?attr/colorSecondaryVariant"
             android:textCursorDrawable="@drawable/search_text_cursor" />
 
@@ -60,6 +62,88 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
-        tools:listitem="@layout/item_search"/>
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_search" />
+
+    <LinearLayout
+        android:id="@+id/emptyContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/emptyImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/ic_empty_tracklist" />
+
+        <TextView
+            android:id="@+id/emptyMessage"
+            style="@style/SearchMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="16dp"
+            android:text="@string/nothing_found" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/errorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/errorImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/ic_error_no_internet" />
+
+        <TextView
+            android:id="@+id/errorMessage"
+            style="@style/SearchMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="16dp"
+            android:text="@string/сonnection_problem" />
+
+        <TextView
+            android:id="@+id/errorMessageDescription"
+            style="@style/SearchMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="20dp"
+            android:text="@string/upload_failed" />
+
+        <Button
+            android:id="@+id/retryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/colorOnPrimary"
+            android:fontFamily="@font/ys_display_regular"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:letterSpacing="0.01"
+            android:text="@string/retry"
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            app:cornerRadius="54dp"
+            app:textAllCaps="false" />
+
+
+    </LinearLayout>
 
 </LinearLayout>
