@@ -9,7 +9,9 @@ import com.example.playlistmaker.databinding.ItemSearchBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+class TrackAdapter(
+    private val searchHistory: SearchHistory
+) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     var trackList = ArrayList<Music>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -22,6 +24,9 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(trackList[position])
+        holder.itemView.setOnClickListener {
+            searchHistory.saveTrack(trackList[position])
+        }
     }
 
     class TrackViewHolder(private val binding: ItemSearchBinding) :

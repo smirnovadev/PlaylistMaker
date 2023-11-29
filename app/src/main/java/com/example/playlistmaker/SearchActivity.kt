@@ -3,6 +3,7 @@ package com.example.playlistmaker
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -26,11 +27,19 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val itunesService = retrofit.create(ItunesApi::class.java)
     private val trackList = ArrayList<Music>()
-    private val adapter = TrackAdapter()
+
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var searchAdapter: TrackAdapter
+    private lateinit var historyAdapter: TrackAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        val sharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPreferences)
+        searchAdapter = TrackAdapter(searchHistory)
+        historyAdapter = TrackAdapter(searchHistory)
+
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -77,14 +86,49 @@ class SearchActivity : AppCompatActivity() {
                 searchForTrack(editText.text.toString())
             }
         }
-        adapter.trackList = trackList
+        searchAdapter.trackList = trackList
         val recyclerView = binding.searchRecycler
         recyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = searchAdapter
+
+        val historyRecyclerView = binding.historyRecycler
+        historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
+        historyRecyclerView.adapter = historyAdapter
+        showHistory()
+
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && (editText.text?.isEmpty() == true)) {
+                showHistory()
+            }
+        }
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (editText.hasFocus() && s?.isEmpty() == true) {
+                    showHistory()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+        })
+        val clearHistoryButton = binding.clearHistoryButton
+        clearHistoryButton.setOnClickListener {
+            searchHistory.clearHistory()
+            historyAdapter.trackList.clear()
+            historyAdapter.notifyDataSetChanged()
+            binding.historyContainer.visibility = View.GONE
+        }
+
     }
 
     fun hideKeyboard(view: View) {
-        val inputMethodManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
@@ -108,21 +152,40 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
+    private fun showHistory() {
+        binding.searchRecycler.visibility = View.GONE
+        binding.errorContainer.visibility = View.GONE
+        binding.emptyContainer.visibility = View.GONE
+
+        val tracks = searchHistory.getAllTracks()
+        if (tracks.isEmpty()) {
+            binding.historyContainer.visibility = View.GONE
+        } else {
+            binding.historyContainer.visibility = View.VISIBLE
+        }
+        historyAdapter.trackList.clear()
+        historyAdapter.trackList.addAll(tracks)
+        historyAdapter.notifyDataSetChanged()
+
+    }
+
     private fun showContent(tracks: List<Music>?) {
         trackList.clear()
         if (tracks?.isNotEmpty() == true) {
             binding.emptyContainer.visibility = View.GONE
             binding.searchRecycler.visibility = View.VISIBLE
             trackList.addAll(tracks)
-            adapter.notifyDataSetChanged()
+            searchAdapter.notifyDataSetChanged()
         } else {
             binding.emptyContainer.visibility = View.VISIBLE
             binding.searchRecycler.visibility = View.GONE
         }
         binding.errorContainer.visibility = View.GONE
+        binding.historyContainer.visibility = View.GONE
     }
 
     private fun showError() {
+        binding.historyContainer.visibility = View.GONE
         binding.searchRecycler.visibility = View.GONE
         binding.errorContainer.visibility = View.VISIBLE
         binding.emptyContainer.visibility = View.GONE
@@ -150,5 +213,6 @@ class SearchActivity : AppCompatActivity() {
         const val USER_TEXT = "USER_TEXT"
         const val DEFAULT_TEXT = ""
         const val BASE_URL = "https://itunes.apple.com"
+        const val SEARCH_HISTORY_PREFERENCES = "key_for_search_history"
     }
 }

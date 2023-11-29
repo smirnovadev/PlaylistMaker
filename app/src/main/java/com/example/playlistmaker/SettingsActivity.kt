@@ -18,6 +18,10 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.themeSwitcher.setOnCheckedChangeListener { switch, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+
         binding.share.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
@@ -29,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
             val message = getString(R.string.message_to_developers)
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
-            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("annaparfenova514@gmail.com"))
+            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("annaparfenova"))
             supportIntent.putExtra(Intent.EXTRA_TEXT, message)
             supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_subject))
             startActivity(supportIntent)
