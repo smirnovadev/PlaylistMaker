@@ -13,9 +13,10 @@ class SearchHistory(val sharedPref: SharedPreferences) {
         } else {
             Gson().fromJson(historyJson, Array<Music>::class.java).toMutableList()
         }
-
+        listMusic.removeAll { it.trackId == track.trackId }
         listMusic.add(track)
-        listMusic = getUniqueMusicList(listMusic)
+
+
         if (listMusic.size > MAX_TRACKS) {
             listMusic.removeAt(0)
         }
@@ -41,9 +42,6 @@ class SearchHistory(val sharedPref: SharedPreferences) {
         editor.apply()
     }
 
-    private fun getUniqueMusicList(list: List<Music>): MutableList<Music> {
-        return list.distinctBy { it.trackId }.toMutableList()
-    }
 
 
 
