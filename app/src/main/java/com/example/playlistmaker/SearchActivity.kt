@@ -26,7 +26,7 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ItunesApi::class.java)
-    private val trackList = ArrayList<Music>()
+    private val trackList = ArrayList<Track>()
 
     private lateinit var searchHistory: SearchHistory
     private lateinit var searchAdapter: TrackAdapter
@@ -34,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
         val sharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferences)
         searchAdapter = TrackAdapter(searchHistory)
@@ -169,7 +168,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun showContent(tracks: List<Music>?) {
+    private fun showContent(tracks: List<Track>?) {
         trackList.clear()
         if (tracks?.isNotEmpty() == true) {
             binding.emptyContainer.visibility = View.GONE
