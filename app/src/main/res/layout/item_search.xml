@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="wrap_content"
+    android:minHeight="60dp">
 
     <ImageView
         android:id="@+id/track_cover_image"
@@ -24,9 +25,9 @@
         android:layout_marginTop="@dimen/track_name_margin_top"
         app:layout_constraintBottom_toTopOf="@id/track_description"
         app:layout_constraintEnd_toStartOf="@id/go_to_track_button"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@+id/track_cover_image"
-        app:layout_constraintTop_toTopOf="@id/track_cover_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="Yesterday (Remastered 2009 remix)" />
 
     <TextView
@@ -35,10 +36,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/go_to_track_button"
         app:layout_constraintStart_toStartOf="@+id/trackName"
         app:layout_constraintTop_toBottomOf="@+id/trackName"
-        app:layout_constraintVertical_chainStyle="packed"
         tools:text="The Beatles • 2-55" />
 
     <ImageView
