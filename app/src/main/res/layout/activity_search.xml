@@ -60,7 +60,7 @@
         android:id="@+id/historyContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/historyTitle"
@@ -188,7 +188,19 @@
             app:cornerRadius="54dp"
             app:textAllCaps="false" />
 
-
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/sky_blue"
+            android:visibility="visible" />
+    </FrameLayout>
 
 </LinearLayout>

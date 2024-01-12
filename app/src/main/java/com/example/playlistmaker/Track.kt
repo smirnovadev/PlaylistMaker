@@ -8,6 +8,7 @@ import java.util.Locale
 
 
 data class Track(
+    val previewUrl: String,
     val trackId: Int,
     val trackName: String,
     val artistName: String,
