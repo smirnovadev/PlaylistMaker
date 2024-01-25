@@ -15,6 +15,8 @@ class App : Application() {
             setTheme(R.style.Theme_PlaylistMaker)
         }
 
+        Creator.init(applicationContext)
+
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
