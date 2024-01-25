@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -66,6 +68,7 @@ class SearchActivity : AppCompatActivity() {
             },
             onTextChanged = { text, start, before, count ->
                 binding.clearButton.visibility = clearButtonVisibility(text)
+                searchDebounce()
             },
             afterTextChanged = { text: Editable? ->
                 if (text != null) {
@@ -125,19 +128,33 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    fun hideKeyboard(view: View) {
+    private val searchRunnable = Runnable {
+        if (clickDebounce()) {
+            searchForTrack(binding.searchEditText.text.toString())
+        }
+    }
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, CLICK_DEBOUNCE_DELAY)
+        binding.errorContainer.visibility = View.GONE
+    }
+
+    private fun hideKeyboard(view: View) {
         val inputMethodManager =
             view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun searchForTrack(text: String) {
+        showLoading()
         itunesService.search(text).enqueue(object : Callback<MusicResponse> {
             override fun onResponse(
                 call: Call<MusicResponse>,
                 response: Response<MusicResponse>
             ) {
+                binding.progressBar.visibility = View.GONE
                 if (response.code() == 200) {
+                    binding.progressBar.visibility = View.GONE
                     val body = response.body()
                     showContent(body?.results)
                 } else {
@@ -151,10 +168,19 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
+    private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.historyContainer.visibility = View.GONE
+        binding.searchRecycler.visibility = View.GONE
+        binding.errorContainer.visibility = View.GONE
+        binding.emptyContainer.visibility = View.GONE
+    }
+
     private fun showHistory() {
         binding.searchRecycler.visibility = View.GONE
         binding.errorContainer.visibility = View.GONE
         binding.emptyContainer.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
 
         val tracks = searchHistory.getAllTracks()
         if (tracks.isEmpty()) {
@@ -165,7 +191,6 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter.trackList.clear()
         historyAdapter.trackList.addAll(tracks)
         historyAdapter.notifyDataSetChanged()
-
     }
 
     private fun showContent(tracks: List<Track>?) {
@@ -181,6 +206,7 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.errorContainer.visibility = View.GONE
         binding.historyContainer.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun showError() {
@@ -188,6 +214,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchRecycler.visibility = View.GONE
         binding.errorContainer.visibility = View.VISIBLE
         binding.emptyContainer.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -208,10 +235,22 @@ class SearchActivity : AppCompatActivity() {
         userText = savedInstanceState.getString(USER_TEXT, DEFAULT_TEXT)
     }
 
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     companion object {
         const val USER_TEXT = "USER_TEXT"
         const val DEFAULT_TEXT = ""
         const val BASE_URL = "https://itunes.apple.com"
         const val SEARCH_HISTORY_PREFERENCES = "key_for_search_history"
+        const val CLICK_DEBOUNCE_DELAY = 2000L
     }
 }
