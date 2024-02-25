@@ -82,13 +82,13 @@
         android:layout_marginTop="54dp"
         android:background="@drawable/ic_add_to_playlist"
         app:layout_constraintBottom_toTopOf="@id/timesForTrack"
-        app:layout_constraintEnd_toStartOf="@id/playbackControl"
+        app:layout_constraintEnd_toStartOf="@id/playback_button"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@id/barrier" />
 
     <ImageButton
-        android:id="@+id/playbackControl"
+        android:id="@+id/playback_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -106,7 +106,7 @@
         android:background="@drawable/ic_add_to_favorites"
         app:layout_constraintBottom_toTopOf="@id/timesForTrack"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintStart_toEndOf="@id/playbackControl"
+        app:layout_constraintStart_toEndOf="@id/playback_button"
         app:layout_constraintTop_toBottomOf="@id/barrier" />
 
     <TextView
@@ -120,7 +120,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/playbackControl" />
+        app:layout_constraintTop_toBottomOf="@id/playback_button" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
