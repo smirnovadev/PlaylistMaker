@@ -1,7 +1,5 @@
 package com.example.playlistmaker.search.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,9 +10,9 @@ import com.example.playlistmaker.search.domain.api.GetTracksSearchQueryUseCase
 import com.example.playlistmaker.search.domain.api.SaveTrackToCacheUseCase
 import com.example.playlistmaker.search.domain.api.SaveTrackToHistoryUseCase
 import com.example.playlistmaker.search.domain.model.Track
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SearchViewModel(
     private val getTrackSearchQueryUseCase: GetTracksSearchQueryUseCase,
@@ -23,7 +21,7 @@ class SearchViewModel(
     private val getTrackHistoryUseCase: GetTrackHistoryUseCase,
     private val saveTrackToCacheUseCase: SaveTrackToCacheUseCase,
 ) : ViewModel() {
-
+    private var searchJob: Job? = null
     private val userTextLiveData = MutableLiveData(DEFAULT_TEXT)
     private val searchStateLiveData = MutableLiveData<SearchState>(SearchState.Loading)
 
@@ -42,15 +40,15 @@ class SearchViewModel(
     fun searchForTrack() {
         val text = userTextLiveData.value ?: return
         searchStateLiveData.value = SearchState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            val tracks = getTrackSearchQueryUseCase.execute(text)
-            withContext(Dispatchers.Main) {
-                if (tracks != null) {
-                    searchStateLiveData.value = SearchState.Content(tracks)
-                } else {
-                    searchStateLiveData.value = SearchState.Error
+        viewModelScope.launch {
+            getTrackSearchQueryUseCase.execute(text)
+                .collect { tracks ->
+                    if (!tracks.isNullOrEmpty()) {
+                        searchStateLiveData.value = SearchState.Content(tracks)
+                    } else {
+                        searchStateLiveData.value = SearchState.Error
+                    }
                 }
-            }
         }
     }
 
@@ -66,6 +64,7 @@ class SearchViewModel(
     fun clearHistory() {
         clearTrackHistoryUseCase.execute()
     }
+
     private val searchRunnable = Runnable {
         if (clickDebounce() && userTextLiveData.value?.isNotEmpty() == true) {
             searchForTrack()
@@ -73,18 +72,24 @@ class SearchViewModel(
     }
 
     private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, SearchFragment.CLICK_DEBOUNCE_DELAY)
+            viewModelScope.launch {
+                delay(SearchFragment.CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
+
     fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SearchFragment.CLICK_DEBOUNCE_DELAY)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SearchFragment.CLICK_DEBOUNCE_DELAY)
+            searchRunnable.run()
+        }
     }
 
     companion object {

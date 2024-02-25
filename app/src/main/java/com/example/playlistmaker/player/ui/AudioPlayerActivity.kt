@@ -38,7 +38,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             updateTimeTextView(playerState.timeMillis)
         }
 
-
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }

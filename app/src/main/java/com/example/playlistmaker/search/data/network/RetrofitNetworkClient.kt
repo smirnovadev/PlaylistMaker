@@ -3,25 +3,25 @@ package com.example.playlistmaker.search.data.network
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.dto.Response
 import com.example.playlistmaker.search.data.dto.TrackSearchRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class RetrofitNetworkClient(private val itunesService: ItunesApi): NetworkClient {
+class RetrofitNetworkClient(private val itunesService: ItunesApi) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
-        return if (dto is TrackSearchRequest) {
-            val retrofitResponse = try {
-                itunesService.search(dto.query).execute()
+    override suspend fun doRequest(dto: Any): Response {
+        if (dto !is TrackSearchRequest) {
+            return Response().apply { resultCode = -1 }
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = itunesService.search(dto.query)
+                response.apply { resultCode = 200 }
             } catch (exception: Exception) {
                 Timber.e(exception.message ?: "Unknown error")
-                return Response()
+                Response().apply { resultCode = 500 }
             }
-
-            val response = retrofitResponse.body() ?: Response()
-            response.resultCode = retrofitResponse.code()
-            response
-        } else {
-            Response().apply { resultCode = 400 }
         }
     }
 }
-

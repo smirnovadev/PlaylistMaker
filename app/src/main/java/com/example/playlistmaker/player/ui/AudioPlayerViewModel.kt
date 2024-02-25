@@ -1,29 +1,21 @@
 package com.example.playlistmaker.player.ui
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCase
 import com.example.playlistmaker.search.domain.model.Track
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val getTrackUseCase: GetTrackFromCacheUseCase,
 ) : ViewModel() {
-
+    private var timerJob: Job? = null
     private var mediaPlayer = MediaPlayer()
-    private val handler = Handler(Looper.getMainLooper())
-    private val updateRunnable = object : Runnable {
-        override fun run() {
-            if (mediaPlayer.isPlaying) {
-                val playbackMillis = mediaPlayer.currentPosition
-                playerStateLiveData.value = getCurrentPlayerState().copy(timeMillis = playbackMillis)
-                handler.postDelayed(this, TIME_INTERVAL)
-            }
-        }
-    }
 
     private var trackLiveData = MutableLiveData<Track>()
     private var playerStateLiveData = MutableLiveData<PlayerState>()
@@ -47,7 +39,7 @@ class AudioPlayerViewModel(
     }
 
     fun releaseResources() {
-        handler.removeCallbacks(updateRunnable)
+        timerJob?.cancel()
         mediaPlayer.release()
     }
 
@@ -59,19 +51,21 @@ class AudioPlayerViewModel(
             playerStateLiveData.value = getCurrentPlayerState().copy(isPrepared = true)
         }
         mediaPlayer.setOnCompletionListener {
-            playerStateLiveData.value = getCurrentPlayerState().copy(timeMillis = 0, isPlaying = false)
+            timerJob?.cancel()
+            playerStateLiveData.value =
+                getCurrentPlayerState().copy(timeMillis = 0, isPlaying = false)
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        handler.post(updateRunnable)
+        startTimer()
         playerStateLiveData.value = getCurrentPlayerState().copy(isPlaying = true)
     }
 
     fun pausePlayer() {
         mediaPlayer.pause()
-        handler.removeCallbacks(updateRunnable)
+        timerJob?.cancel()
         playerStateLiveData.value = getCurrentPlayerState().copy(isPlaying = false)
     }
 
@@ -81,13 +75,25 @@ class AudioPlayerViewModel(
             playerState.isPlaying -> {
                 pausePlayer()
             }
+
             !playerState.isPlaying && playerState.isPrepared -> {
                 startPlayer()
             }
         }
     }
 
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (mediaPlayer.isPlaying) {
+                val playbackMillis = mediaPlayer.currentPosition
+                playerStateLiveData.value =
+                    getCurrentPlayerState().copy(timeMillis = playbackMillis)
+                delay(TIME_INTERVAL)
+            }
+        }
+    }
+
     companion object {
-        private const val TIME_INTERVAL = 100L
+        private const val TIME_INTERVAL = 300L
     }
 }
