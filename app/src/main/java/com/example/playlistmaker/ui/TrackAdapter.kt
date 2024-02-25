@@ -1,16 +1,16 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.AudioPlayerActivity.Companion.KEY_TRACK_DATA
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ItemSearchBinding
+import com.example.playlistmaker.domain.model.Track
 
 class TrackAdapter(
-    private val searchHistory: SearchHistory
+    private val onClickAction: (Track) -> Unit
 ) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     var trackList = ArrayList<Track>()
 
@@ -21,14 +21,11 @@ class TrackAdapter(
 
     override fun getItemCount(): Int = trackList.size
 
-
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackList[position])
+        val trackData = trackList[position]
+        holder.bind(trackData)
         holder.itemView.setOnClickListener {
-            searchHistory.saveTrack(trackList[position])
-            val playerIntent = Intent(holder.itemView.context, AudioPlayerActivity::class.java)
-            playerIntent.putExtra(KEY_TRACK_DATA, trackList[position])
-            holder.itemView.context.startActivity(playerIntent)
+            onClickAction.invoke(trackData)
         }
     }
 
@@ -42,7 +39,7 @@ class TrackAdapter(
                 .placeholder(R.drawable.track_placeholder_45)
                 .transform(RoundedCorners(10))
                 .into(binding.trackCoverImage)
-            val formattedDuration = track.formattedDuration()
+            val formattedDuration = track.formattedDuration
 
             binding.trackName.text = track.trackName
             binding.trackDescription.text = itemView.context.getString(

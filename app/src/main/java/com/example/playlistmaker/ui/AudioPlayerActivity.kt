@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -8,7 +8,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.AudioPlayerBinding
+import com.example.playlistmaker.domain.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -19,6 +22,8 @@ class AudioPlayerActivity: AppCompatActivity() {
     private var mediaPlayer = MediaPlayer()
     private var url: String? = null
     private var playerState = STATE_DEFAULT
+
+    private val getTrackUseCase by lazy { Creator.provideGetTrackFromCacheUseCase() }
 
     private val handler = Handler(Looper.getMainLooper())
     private val updateRunnable = object : Runnable {
@@ -38,7 +43,8 @@ class AudioPlayerActivity: AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
-        val trackData = intent.extras?.getSerializable(KEY_TRACK_DATA) as Track
+
+        val trackData = getTrackUseCase.execute() ?: error("intent not found")
         url = trackData.previewUrl
         showTrackData(trackData)
         preparePlayer()
@@ -50,13 +56,13 @@ class AudioPlayerActivity: AppCompatActivity() {
 
     private fun showTrackData(track: Track){
         Glide.with(this)
-            .load(track.getCoverArtwork())
+            .load(track.artworkUrl512)
             .centerCrop()
             .placeholder(R.drawable.ic_placeholder_312)
             .transform(RoundedCorners(8))
             .into(binding.trackCover)
-        val formattedTrackTimes = track.formattedDuration()
-        val formattedTrackYear = track.extractYear()
+        val formattedTrackTimes = track.formattedDuration
+        val formattedTrackYear = track.releaseYear
         binding.trackTime.text = formattedTrackTimes
 
         if (track.collectionName == null) {
@@ -126,7 +132,6 @@ class AudioPlayerActivity: AppCompatActivity() {
         binding.timesForTrack.text = formatter.format(timeMillis + TIME_TO_CEIL)
     }
     companion object {
-        const val KEY_TRACK_DATA = "KEY_TRACK_DATA"
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2

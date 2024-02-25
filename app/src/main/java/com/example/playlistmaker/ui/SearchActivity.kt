@@ -1,6 +1,7 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,35 +12,41 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.playlistmaker.domain.model.Track
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SearchActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySearchBinding
     private var userText: String = DEFAULT_TEXT
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val itunesService = retrofit.create(ItunesApi::class.java)
-    private val trackList = ArrayList<Track>()
 
-    private lateinit var searchHistory: SearchHistory
+    private val getTrackSearchQueryUseCase = Creator.provideGetTrackSearchQueryUseCase()
+    private val clearTrackHistoryUseCase = Creator.provideClearTrackHistoryUseCase()
+    private val saveTrackToHistoryUseCase = Creator.provideSaveTrackToHistoryUseCase()
+    private val getTrackHistoryUseCase = Creator.provideGetTrackHistoryUseCase()
+    private val saveTrackToCacheUseCase = Creator.provideSaveTrackToCacheUseCase()
+
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
+    private val trackList = ArrayList<Track>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPreferences)
-        searchAdapter = TrackAdapter(searchHistory)
-        historyAdapter = TrackAdapter(searchHistory)
+        searchAdapter = TrackAdapter(onClickAction = { trackData ->
+            saveTrackToHistoryUseCase.execute(trackData)
+            navigateToAudioPlayerActivity(trackData)
+        })
+        historyAdapter = TrackAdapter(onClickAction = { trackData ->
+            saveTrackToHistoryUseCase.execute(trackData)
+            navigateToAudioPlayerActivity(trackData)
+        })
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -120,7 +127,7 @@ class SearchActivity : AppCompatActivity() {
         })
         val clearHistoryButton = binding.clearHistoryButton
         clearHistoryButton.setOnClickListener {
-            searchHistory.clearHistory()
+            clearTrackHistoryUseCase.execute()
             historyAdapter.trackList.clear()
             historyAdapter.notifyDataSetChanged()
             binding.historyContainer.visibility = View.GONE
@@ -128,8 +135,14 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun navigateToAudioPlayerActivity(trackData: Track) {
+        saveTrackToCacheUseCase.execute(trackData)
+        val playerIntent = Intent(this, AudioPlayerActivity::class.java)
+        startActivity(playerIntent)
+    }
+
     private val searchRunnable = Runnable {
-        if (clickDebounce()) {
+        if (clickDebounce() && binding.searchEditText.text?.isNotEmpty() == true) {
             searchForTrack(binding.searchEditText.text.toString())
         }
     }
@@ -147,25 +160,16 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchForTrack(text: String) {
         showLoading()
-        itunesService.search(text).enqueue(object : Callback<MusicResponse> {
-            override fun onResponse(
-                call: Call<MusicResponse>,
-                response: Response<MusicResponse>
-            ) {
-                binding.progressBar.visibility = View.GONE
-                if (response.code() == 200) {
-                    binding.progressBar.visibility = View.GONE
-                    val body = response.body()
-                    showContent(body?.results)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val tracks = getTrackSearchQueryUseCase.execute(text)
+            withContext(Dispatchers.Main) {
+                if (tracks != null) {
+                    showContent(tracks)
                 } else {
                     showError()
                 }
             }
-
-            override fun onFailure(call: Call<MusicResponse>, t: Throwable) {
-                showError()
-            }
-        })
+        }
     }
 
     private fun showLoading() {
@@ -182,7 +186,7 @@ class SearchActivity : AppCompatActivity() {
         binding.emptyContainer.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
 
-        val tracks = searchHistory.getAllTracks()
+        val tracks = getTrackHistoryUseCase.execute()
         if (tracks.isEmpty()) {
             binding.historyContainer.visibility = View.GONE
         } else {
@@ -249,8 +253,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val USER_TEXT = "USER_TEXT"
         const val DEFAULT_TEXT = ""
-        const val BASE_URL = "https://itunes.apple.com"
-        const val SEARCH_HISTORY_PREFERENCES = "key_for_search_history"
         const val CLICK_DEBOUNCE_DELAY = 2000L
     }
 }

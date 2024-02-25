@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/setting"
-        tools:context=".SettingsActivity" />
+        tools:context=".ui.SettingsActivity" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         style="@style/TextSettingStyle"
