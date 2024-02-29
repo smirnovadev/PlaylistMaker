@@ -6,10 +6,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCase
 import com.example.playlistmaker.search.domain.model.Track
 
@@ -93,15 +89,5 @@ class AudioPlayerViewModel(
 
     companion object {
         private const val TIME_INTERVAL = 100L
-        fun getViewModelFactory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val useCase =
-                        Creator.provideGetTrackFromCacheUseCase()
-                    AudioPlayerViewModel(
-                        useCase,
-                    )
-                }
-            }
     }
 }

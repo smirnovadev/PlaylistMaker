@@ -3,27 +3,24 @@ package com.example.playlistmaker.player.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.AudioPlayerBinding
 import com.example.playlistmaker.search.domain.model.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var binding: AudioPlayerBinding
+    private val viewModel: AudioPlayerViewModel by viewModel()
 
-    private lateinit var viewModel: AudioPlayerViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(
-            this,
-            AudioPlayerViewModel.getViewModelFactory()
-        )[AudioPlayerViewModel::class.java]
+        binding = AudioPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         viewModel.getTrackLiveData().observe(this) { track ->
             showTrackData(track)
@@ -41,8 +38,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             updateTimeTextView(playerState.timeMillis)
         }
 
-        binding = AudioPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -54,28 +50,32 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun showTrackData(track: Track) {
+        showTrackPlayer(track)
+        showTrackDescription(track)
+    }
+
+    private fun showTrackPlayer(track: Track) {
         Glide.with(this)
             .load(track.artworkUrl512)
             .centerCrop()
             .placeholder(R.drawable.ic_placeholder_312)
             .transform(RoundedCorners(8))
             .into(binding.trackCover)
-        val formattedTrackTimes = track.formattedDuration
-        val formattedTrackYear = track.releaseYear
-        binding.trackTime.text = formattedTrackTimes
+        binding.trackName.text = track.trackName
+        binding.trackArtist.text = track.artistName
+    }
 
+    private fun showTrackDescription(track: Track) {
+        binding.trackTime.text = track.formattedDuration
+        binding.trackYear.text = track.releaseYear
+        binding.genreTrack.text = track.primaryGenreName
+        binding.countryTrack.text = track.country
         if (track.collectionName == null) {
             binding.album.visibility = View.GONE
             binding.collectionName.visibility = View.GONE
         } else {
             binding.album.text = track.collectionName
         }
-
-        binding.trackYear.text = formattedTrackYear
-        binding.genreTrack.text = track.primaryGenreName
-        binding.trackName.text = track.trackName
-        binding.trackArtist.text = track.artistName
-        binding.countryTrack.text = track.country
     }
 
     override fun onPause() {

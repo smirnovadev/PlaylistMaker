@@ -1,13 +1,10 @@
 package com.example.playlistmaker.settings.data
 
-import android.content.Context
+import android.content.SharedPreferences
 import com.example.playlistmaker.settings.domain.SettingsRepository
 
-class SettingsRepositoryImpl(context: Context): SettingsRepository {
+class SettingsRepositoryImpl(private val sharedPref: SharedPreferences): SettingsRepository {
 
-    private val sharedPref = context.getSharedPreferences(
-        SETTINGS_SHARED_PREF, Context.MODE_PRIVATE
-    )
     override fun saveIsNightTheme(isNightTheme: Boolean) {
         sharedPref.edit()
             .putBoolean(THEME_KEY, isNightTheme)
@@ -19,7 +16,6 @@ class SettingsRepositoryImpl(context: Context): SettingsRepository {
     }
 
     companion object{
-        const val SETTINGS_SHARED_PREF = "SETTINGS_SHARED_PREF"
         const val THEME_KEY = "THEME_KEY"
     }
 }

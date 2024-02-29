@@ -3,14 +3,13 @@ package com.example.playlistmaker.search.data
 import com.example.playlistmaker.search.data.dto.TrackResponse
 import com.example.playlistmaker.search.data.dto.TrackSearchRequest
 import com.example.playlistmaker.search.data.mapper.TrackMapper
-import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.domain.api.SearchTrackRepository
 import com.example.playlistmaker.search.domain.model.Track
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class SearchTrackRepositoryImpl(
-    private val networkClient: RetrofitNetworkClient,
+    private val networkClient: NetworkClient,
     private val trackMapper: TrackMapper
 ) : SearchTrackRepository {
     override suspend fun getTrackList(query: String): List<Track>? {
