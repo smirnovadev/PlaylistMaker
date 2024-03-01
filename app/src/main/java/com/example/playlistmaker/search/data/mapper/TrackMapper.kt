@@ -1,8 +1,8 @@
 package com.example.playlistmaker.search.data.mapper
 
-import android.util.Log
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.model.Track
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -16,10 +16,10 @@ class TrackMapper {
         val releaseYear: String = try {
             LocalDate.parse(dto.releaseDate, DateTimeFormatter.ISO_DATE_TIME).year.toString()
         } catch (e: DateTimeParseException) {
-            Log.w("playlistMaker", "error while parsing track", e.cause)
+            Timber.e(e.cause, "error while parsing track")
             ""
         } catch (e: NullPointerException) {
-            Log.w("playlistMaker", "no release year for track id=${dto.trackId}")
+            Timber.e("no release year for track id=${dto.trackId}")
             ""
         }
         val artworkUrl512 = dto.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")

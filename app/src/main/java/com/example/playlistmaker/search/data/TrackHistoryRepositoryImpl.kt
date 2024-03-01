@@ -1,19 +1,16 @@
 package com.example.playlistmaker.search.data
 
-import android.content.Context
+import android.content.SharedPreferences
 import com.example.playlistmaker.search.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.search.domain.model.Track
 import com.google.gson.Gson
 
 
-class TrackHistoryRepositoryImpl(context: Context): SearchHistoryRepository {
-
-    private val sharedPref = context.getSharedPreferences(
-        SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE
-    )
+class TrackHistoryRepositoryImpl(private val sharedPref: SharedPreferences,
+                                 private val gson: Gson): SearchHistoryRepository {
 
     override fun saveTrackHistoryList(listTrack: MutableList<Track>) {
-        val gsonFromListMusic = Gson().toJson(listTrack)
+        val gsonFromListMusic = gson.toJson(listTrack)
         sharedPref.edit()
             .putString(UNIQ_TRACKS_KEY, gsonFromListMusic)
             .apply()
@@ -24,18 +21,16 @@ class TrackHistoryRepositoryImpl(context: Context): SearchHistoryRepository {
         val listTrack = if (historyJson == null) {
             mutableListOf()
         } else {
-            Gson().fromJson(historyJson, Array<Track>::class.java).toMutableList()
+            gson.fromJson(historyJson, Array<Track>::class.java).toMutableList()
         }
         return listTrack
     }
 
     override fun clearHistory() {
-        val editor = sharedPref.edit()
-        editor.clear()
-        editor.apply()
+        sharedPref.edit().clear().apply()
     }
+
     companion object {
-        private const val SEARCH_HISTORY_PREFERENCES = "key_for_search_history"
         private const val UNIQ_TRACKS_KEY = "key_for_uniq_keys"
     }
 }

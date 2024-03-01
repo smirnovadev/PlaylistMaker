@@ -5,11 +5,7 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.domain.api.ClearTrackHistoryUseCase
 import com.example.playlistmaker.search.domain.api.GetTrackHistoryUseCase
 import com.example.playlistmaker.search.domain.api.GetTracksSearchQueryUseCase
@@ -93,17 +89,5 @@ class SearchViewModel(
 
     companion object {
         const val DEFAULT_TEXT = ""
-        fun getViewModelFactory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    SearchViewModel(
-                        getTrackSearchQueryUseCase = Creator.provideGetTrackSearchQueryUseCase(),
-                        clearTrackHistoryUseCase = Creator.provideClearTrackHistoryUseCase(),
-                        saveTrackToHistoryUseCase = Creator.provideSaveTrackToHistoryUseCase(),
-                        getTrackHistoryUseCase = Creator.provideGetTrackHistoryUseCase(),
-                        saveTrackToCacheUseCase = Creator.provideSaveTrackToCacheUseCase()
-                    )
-                }
-            }
     }
 }
