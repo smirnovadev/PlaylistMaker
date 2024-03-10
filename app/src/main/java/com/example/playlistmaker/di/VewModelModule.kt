@@ -1,3 +1,5 @@
+import com.example.playlistmaker.music.ui.FavoritesMusicViewModel
+import com.example.playlistmaker.music.ui.PlaylistViewModel
 import com.example.playlistmaker.player.ui.AudioPlayerViewModel
 import com.example.playlistmaker.search.ui.SearchViewModel
 import com.example.playlistmaker.settings.ui.SettingsViewModel
@@ -16,5 +18,13 @@ val viewModel = module {
 
     viewModel {
         AudioPlayerViewModel(get())
+    }
+
+    viewModel {
+        FavoritesMusicViewModel()
+    }
+
+    viewModel {
+        PlaylistViewModel()
     }
 }
