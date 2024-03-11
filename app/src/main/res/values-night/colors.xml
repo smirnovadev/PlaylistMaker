@@ -2,10 +2,11 @@
 <resources>
     <color name="colorSearchBackground">@color/white</color>
     <color name="colorOnBackground">@color/white</color>
-    <color name="colorPrimary">@color/black</color>
-    <color name="colorPrimaryVariant">@color/black</color>
+    <color name="colorPrimary">@color/light_black_background</color>
+    <color name="colorPrimaryVariant">@color/light_black_background</color>
     <color name="colorOnPrimary">@color/white</color>
     <color name="colorSecondary">@color/white</color>
     <color name="colorSecondaryVariant">@color/black</color>
     <color name="colorOnSecondary">@color/sky_blue</color>
+    <color name="colorBackground">@color/light_black_background</color>
 </resources>

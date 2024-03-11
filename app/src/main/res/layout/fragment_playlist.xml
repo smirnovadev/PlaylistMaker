@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/newPlaylistButton"
@@ -13,14 +12,21 @@
         android:layout_gravity="center"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
-        android:text="Новый плейлист" />
+        android:text="@string/newPlaylist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/emptyPlaylistImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_empty_tracklist" />
+        android:layout_marginTop="46dp"
+        android:src="@drawable/ic_empty_tracklist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/newPlaylistButton" />
 
     <TextView
         android:id="@+id/emptyPlaylistText"
@@ -29,6 +35,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="16dp"
-        android:text="@string/emptyPlaylist" />
+        android:text="@string/emptyPlaylist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emptyPlaylistImage" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

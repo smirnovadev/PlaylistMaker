@@ -37,4 +37,5 @@
     <string name="emptyPlaylist">Вы не создали ни одного плейлиста</string>
     <string name="favorites_track">Избранные треки</string>
     <string name="playlist">Плейлисты</string>
+    <string name="newPlaylist">Новый плейлист</string>
 </resources>
