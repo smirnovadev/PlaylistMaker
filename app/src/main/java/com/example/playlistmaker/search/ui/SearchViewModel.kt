@@ -78,13 +78,13 @@ class SearchViewModel(
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, SearchActivity.CLICK_DEBOUNCE_DELAY)
+            handler.postDelayed({ isClickAllowed = true }, SearchFragment.CLICK_DEBOUNCE_DELAY)
         }
         return current
     }
     fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SearchActivity.CLICK_DEBOUNCE_DELAY)
+        handler.postDelayed(searchRunnable, SearchFragment.CLICK_DEBOUNCE_DELAY)
     }
 
     companion object {
