@@ -20,7 +20,7 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".music.MusicActivity"
+            android:name=".music.ui.MusicActivity"
             android:exported="false" />
         <activity
             android:name=".search.ui.SearchActivity"

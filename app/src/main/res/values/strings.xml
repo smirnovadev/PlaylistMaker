@@ -32,4 +32,10 @@
     <string name="country">Страна</string>
     <string name="duration">Длительность</string>
     <string name="default_track_duration">0:30</string>
+    <string name="music">Медиатека</string>
+    <string name="emptyFavorites">Ваша медиатека пуста</string>
+    <string name="emptyPlaylist">Вы не создали ни одного плейлиста</string>
+    <string name="favorites_track">Избранные треки</string>
+    <string name="playlist">Плейлисты</string>
+    <string name="newPlaylist">Новый плейлист</string>
 </resources>
