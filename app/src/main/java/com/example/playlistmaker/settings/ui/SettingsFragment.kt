@@ -3,30 +3,40 @@ package com.example.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySettingsBinding
+class SettingsFragment : Fragment() {
+
+    private  var _binding: FragmentSettingsBinding? = null
+    private val binding
+        get() = _binding!!
+
     private val viewModel: SettingsViewModel by viewModel()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getIsNightThemeLiveData().observe(this) { isNightTheme ->
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.getIsNightThemeLiveData().observe(viewLifecycleOwner) { isNightTheme ->
             binding.themeSwitcher.isChecked = isNightTheme
         }
 
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.toolbar.setTitle(R.string.setting)
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
-        }
 
         binding.themeSwitcher.setOnCheckedChangeListener { switch, checked ->
-            (applicationContext as App).switchTheme(checked)
+            (requireActivity().application as App).switchTheme(checked)
             viewModel.saveTheme(checked)
         }
 
@@ -53,5 +63,9 @@ class SettingsActivity : AppCompatActivity() {
             openIntent.data = Uri.parse(url)
             startActivity(openIntent)
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
