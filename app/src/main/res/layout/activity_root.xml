@@ -20,8 +20,9 @@ tools:context=".main.RootActivity">
 
 <com.google.android.material.bottomnavigation.BottomNavigationView
     android:id="@+id/bottomNavigationView"
+    android:background="@drawable/bottom_navigation_background"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="56dp"
     app:itemIconTint="@drawable/bottom_nav_item_color_selector"
     app:itemTextColor="@drawable/bottom_nav_item_color_selector"
     app:layout_constraintBottom_toBottomOf="parent"
