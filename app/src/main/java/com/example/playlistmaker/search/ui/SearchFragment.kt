@@ -1,30 +1,51 @@
 package com.example.playlistmaker.search.ui
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.player.ui.AudioPlayerActivity
+import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.model.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SearchActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySearchBinding
+class SearchFragment : Fragment() {
+
+    private  var _binding: FragmentSearchBinding? = null
+    private val binding
+        get() = _binding!!
+
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
     private val trackList = ArrayList<Track>()
     private val viewModel: SearchViewModel by viewModel()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getSearchStateLiveData().observe(this) { searchState ->
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { searchState ->
             when (searchState) {
                 is SearchState.Loading -> showLoading()
                 is SearchState.Content -> showContent(searchState.tracks)
@@ -43,14 +64,8 @@ class SearchActivity : AppCompatActivity() {
             navigateToAudioPlayerActivity(trackData)
         })
 
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
         val editText = binding.searchEditText
 
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
-        }
         editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (editText.text?.isNotEmpty() == true) {
@@ -80,7 +95,7 @@ class SearchActivity : AppCompatActivity() {
         binding.clearButton.setOnClickListener {
             editText.setText(DEFAULT_TEXT)
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(editText.windowToken, 0)
         }
 
@@ -91,11 +106,11 @@ class SearchActivity : AppCompatActivity() {
         }
         searchAdapter.trackList = trackList
         val recyclerView = binding.searchRecycler
-        recyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = searchAdapter
 
         val historyRecyclerView = binding.historyRecycler
-        historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
+        historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         historyRecyclerView.adapter = historyAdapter
         viewModel.loadHistoryData()
 
@@ -111,13 +126,11 @@ class SearchActivity : AppCompatActivity() {
             historyAdapter.notifyDataSetChanged()
             binding.historyContainer.visibility = View.GONE
         }
-
     }
 
     private fun navigateToAudioPlayerActivity(trackData: Track) {
         viewModel.saveTrackToCache(trackData)
-        val playerIntent = Intent(this, AudioPlayerActivity::class.java)
-        startActivity(playerIntent)
+        findNavController().navigate(R.id.action_searchFragment_to_audioPlayerActivity)
     }
 
     private fun hideKeyboard(view: View) {
