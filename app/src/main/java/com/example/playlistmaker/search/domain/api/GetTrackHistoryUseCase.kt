@@ -1,7 +1,8 @@
 package com.example.playlistmaker.search.domain.api
 
 import com.example.playlistmaker.search.domain.model.Track
+import kotlinx.coroutines.flow.Flow
 
 interface GetTrackHistoryUseCase {
-    fun execute(): List<Track>
+    fun execute(): Flow<List<Track>>
 }

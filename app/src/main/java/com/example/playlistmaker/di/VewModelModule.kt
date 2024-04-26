@@ -17,11 +17,11 @@ val viewModel = module {
     }
 
     viewModel {
-        AudioPlayerViewModel(get())
+        AudioPlayerViewModel(get(), get(), get())
     }
 
     viewModel {
-        FavoritesMusicViewModel()
+        FavoritesMusicViewModel(get(), get())
     }
 
     viewModel {
