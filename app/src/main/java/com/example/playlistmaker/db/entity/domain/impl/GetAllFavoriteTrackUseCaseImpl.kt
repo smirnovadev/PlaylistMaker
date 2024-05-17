@@ -1,7 +1,7 @@
-package com.example.playlistmaker.db.entity.domain.db.impl
+package com.example.playlistmaker.db.entity.domain.impl
 
-import com.example.playlistmaker.db.entity.domain.db.FavoritesTrackRepository
-import com.example.playlistmaker.db.entity.domain.db.GetAllFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.FavoritesTrackRepository
+import com.example.playlistmaker.db.entity.domain.GetAllFavoriteTrackUseCase
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -12,7 +12,7 @@ class GetAllFavoriteTrackUseCaseImpl(private val favoritesTrackRepository: Favor
         return favoritesTrackRepository.getAllFavoriteTrack()
             .map { tracks ->
                 tracks.forEach{
-                    track ->  track.isFavorite = true
+                        track ->  track.isFavorite = true
                 }
                 tracks
             }

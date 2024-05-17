@@ -18,7 +18,9 @@
         <activity
             android:name=".player.ui.AudioPlayerActivity"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity
             android:name=".music.ui.MusicFragment"
             android:exported="false" />

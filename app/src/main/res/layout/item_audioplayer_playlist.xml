@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="60dp">
+
+    <ImageView
+        android:id="@+id/playlist_cover_image"
+        android:layout_width="@dimen/track_cover_image_size"
+        android:layout_height="@dimen/track_cover_image_size"
+        android:layout_marginStart="@dimen/track_cover_margin_start_"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/playlist_name"
+        style="@style/TrackNameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/track_name_margin_start"
+        android:layout_marginTop="14dp"
+        app:layout_constraintBottom_toTopOf="@id/tracks_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playlist_cover_image"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Best songs 2021" />
+
+    <TextView
+        android:id="@+id/tracks_number"
+        style="@style/TrackDescriptionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/playlist_name"
+        app:layout_constraintTop_toBottomOf="@+id/playlist_name"
+        tools:text="98 треков" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

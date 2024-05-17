@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.db.entity.domain.db.GetAllFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.GetAllFavoriteTrackUseCase
 import com.example.playlistmaker.search.domain.api.SaveTrackToCacheUseCase
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.launch

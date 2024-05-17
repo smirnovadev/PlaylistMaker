@@ -1,4 +1,4 @@
-package com.example.playlistmaker.db.entity.domain.db
+package com.example.playlistmaker.db.entity.domain
 
 import com.example.playlistmaker.search.domain.model.Track
 

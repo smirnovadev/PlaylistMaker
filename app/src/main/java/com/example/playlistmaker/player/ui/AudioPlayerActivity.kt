@@ -2,13 +2,18 @@ package com.example.playlistmaker.player.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.AudioPlayerBinding
+import com.example.playlistmaker.playlist.ui.CreatePlaylistFragment
 import com.example.playlistmaker.search.domain.model.Track
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -22,15 +27,37 @@ class AudioPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = AudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val bottomSheetContainer = binding.playlistsBottomSheet
+        val adapter = PlaylistAdapter()
+        adapter.setOnClickListener { playlist ->
+            viewModel.addTrackToPlaylist(playlist)
+            Timber.tag("mylog").v( "playlist Clicked!")
+        }
+        binding.playlistyRecycler.layoutManager = LinearLayoutManager(this)
+        binding.playlistyRecycler.adapter = adapter
+
 
         viewModel.getTrackLiveData().observe(this) { track ->
             showTrackData(track)
         }
 
+        viewModel.getTrackAddedState().observe(this) { trackAddedState ->
+            when (trackAddedState) {
+                is TrackAddedState.Success -> {
+                    Toast.makeText(this, "Добавлено в плейлист '${trackAddedState.playlist.playlistName}'", Toast.LENGTH_SHORT).show()
+                    BottomSheetBehavior.from(bottomSheetContainer).apply {
+                        state = BottomSheetBehavior.STATE_HIDDEN
+                    }
+                }
+                is TrackAddedState.Fail -> {
+                    Toast.makeText(this, "Трек уже добавлен в плейлист '${trackAddedState.playlist.playlistName}'", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
-        val addToFavoritesButton =  binding.addToFavorites
+        val addToFavoritesButton = binding.addToFavorites
 
-        viewModel.getFavoriteTrackLiveDaya().observe(this) {favoriteTrack ->
+        viewModel.getFavoriteTrackLiveData().observe(this) { favoriteTrack ->
             addToFavoritesButton.setBackgroundResource(
                 if (favoriteTrack) {
                     R.drawable.ic_favorites_button
@@ -42,9 +69,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         addToFavoritesButton.setOnClickListener {
-           viewModel.onFavoriteClicked()
+            viewModel.onFavoriteClicked()
         }
-
 
         viewModel.getPlayerStateLiveData().observe(this) { playerState ->
             binding.playbackButton.setBackgroundResource(
@@ -65,6 +91,62 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         binding.playbackButton.setOnClickListener {
             viewModel.onPlaybackButtonClick()
+        }
+
+        val overlay = binding.overlay
+
+        binding.addToPlaylist.setOnClickListener {
+            viewModel.getAllPlaylist()
+            BottomSheetBehavior.from(bottomSheetContainer).apply {
+                state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        viewModel.getPlaylistLiveData().observe(this) { playlists ->
+            adapter.playlists.clear()
+            adapter.playlists.addAll(playlists)
+            adapter.notifyDataSetChanged()
+        }
+
+        binding.newPlaylistButton.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentContainer.id, CreatePlaylistFragment())
+                .addToBackStack(null)
+                .setReorderingAllowed(true)
+                .commit()
+        }
+
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        overlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
         }
     }
 

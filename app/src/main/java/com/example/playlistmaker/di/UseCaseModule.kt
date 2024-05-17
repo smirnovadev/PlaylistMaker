@@ -1,11 +1,19 @@
-import com.example.playlistmaker.db.entity.domain.db.AddFavoriteTrackUseCase
-import com.example.playlistmaker.db.entity.domain.db.ClearFavoriteTrackUseCase
-import com.example.playlistmaker.db.entity.domain.db.GetAllFavoriteTrackUseCase
-import com.example.playlistmaker.db.entity.domain.db.impl.AddFavoriteTrackUseCaseImpl
-import com.example.playlistmaker.db.entity.domain.db.impl.ClearFavoriteTrackUseCaseImpl
-import com.example.playlistmaker.db.entity.domain.db.impl.GetAllFavoriteTrackUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.AddFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.AddTrackToPlaylistUseCase
+import com.example.playlistmaker.db.entity.domain.ClearFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.GetAllFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.GetAllPlaylistUseCase
+import com.example.playlistmaker.db.entity.domain.SavePlaylistUseCase
+import com.example.playlistmaker.db.entity.domain.impl.AddFavoriteTrackUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.impl.AddTrackToPlaylistUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.impl.ClearFavoriteTrackUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.impl.GetAllFavoriteTrackUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.impl.GetAllPlaylistUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.impl.SavePlaylistUseCaseImpl
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCase
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCaseImpl
+import com.example.playlistmaker.playlist.domain.SaveImageToPrivateStorageUseCase
+import com.example.playlistmaker.playlist.domain.impl.SaveImageToPrivateStorageUseCaseImpl
 import com.example.playlistmaker.search.domain.api.ClearTrackHistoryUseCase
 import com.example.playlistmaker.search.domain.api.GetTrackHistoryUseCase
 import com.example.playlistmaker.search.domain.api.GetTracksSearchQueryUseCase
@@ -65,4 +73,20 @@ val useCaseModule = module {
     single<GetAllFavoriteTrackUseCase> {
         GetAllFavoriteTrackUseCaseImpl(get())
     }
+
+    single<SaveImageToPrivateStorageUseCase> {
+        SaveImageToPrivateStorageUseCaseImpl(get())
+    }
+    single<SavePlaylistUseCase> {
+        SavePlaylistUseCaseImpl(get())
+    }
+
+    single<GetAllPlaylistUseCase>  {
+        GetAllPlaylistUseCaseImpl(get())
+    }
+
+    single<AddTrackToPlaylistUseCase> {
+        AddTrackToPlaylistUseCaseImpl(get())
+    }
+
 }
