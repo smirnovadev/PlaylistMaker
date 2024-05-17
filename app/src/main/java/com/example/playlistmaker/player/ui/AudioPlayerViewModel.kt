@@ -54,17 +54,19 @@ class AudioPlayerViewModel(
         preparePlayer()
     }
 
-    fun releaseResources() {
+    override fun onCleared() {
+        super.onCleared()
         timerJob?.cancel()
         mediaPlayer.release()
     }
 
     private fun preparePlayer() {
         val url = trackLiveData.value?.previewUrl
+        mediaPlayer.reset()
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.value = getCurrentPlayerState().copy(isPrepared = true)
+            playerStateLiveData.value = getCurrentPlayerState().copy(timeMillis = 0, isPrepared = true)
         }
         mediaPlayer.setOnCompletionListener {
             timerJob?.cancel()
