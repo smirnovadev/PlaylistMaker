@@ -1,3 +1,9 @@
+import com.example.playlistmaker.db.entity.domain.db.AddFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.db.ClearFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.db.GetAllFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.db.impl.AddFavoriteTrackUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.db.impl.ClearFavoriteTrackUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.db.impl.GetAllFavoriteTrackUseCaseImpl
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCase
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCaseImpl
 import com.example.playlistmaker.search.domain.api.ClearTrackHistoryUseCase
@@ -15,7 +21,6 @@ import com.example.playlistmaker.settings.domain.GetIsNightThemeUseCaseImpl
 import com.example.playlistmaker.settings.domain.SaveThemeUseCase
 import com.example.playlistmaker.settings.domain.SaveThemeUseCaseImpl
 import org.koin.dsl.module
-
 
 
 val useCaseModule = module {
@@ -50,5 +55,14 @@ val useCaseModule = module {
 
     single<GetTrackHistoryUseCase> {
         GetTrackHistoryUseCaseImpl(get())
+    }
+    single<AddFavoriteTrackUseCase> {
+        AddFavoriteTrackUseCaseImpl(get())
+    }
+    single<ClearFavoriteTrackUseCase> {
+        ClearFavoriteTrackUseCaseImpl(get())
+    }
+    single<GetAllFavoriteTrackUseCase> {
+        GetAllFavoriteTrackUseCaseImpl(get())
     }
 }

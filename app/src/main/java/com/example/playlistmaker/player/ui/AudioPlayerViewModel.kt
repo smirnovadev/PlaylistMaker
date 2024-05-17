@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.db.entity.domain.db.AddFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.db.ClearFavoriteTrackUseCase
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCase
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.Job
@@ -13,12 +15,15 @@ import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val getTrackUseCase: GetTrackFromCacheUseCase,
+    private val addFavoriteTrackUseCase: AddFavoriteTrackUseCase,
+    private val clearFavoriteTrackUseCase: ClearFavoriteTrackUseCase
 ) : ViewModel() {
     private var timerJob: Job? = null
     private var mediaPlayer = MediaPlayer()
 
     private var trackLiveData = MutableLiveData<Track>()
     private var playerStateLiveData = MutableLiveData<PlayerState>()
+    private var isFavoriteTrackLiveData = MutableLiveData<Boolean>()
 
     private fun getCurrentPlayerState(): PlayerState {
         return playerStateLiveData.value ?: PlayerState(
@@ -31,10 +36,12 @@ class AudioPlayerViewModel(
     fun getTrackLiveData(): LiveData<Track> = trackLiveData
 
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
+    fun getFavoriteTrackLiveDaya(): LiveData<Boolean> = isFavoriteTrackLiveData
 
     fun loadTrackData() {
         val trackData = getTrackUseCase.execute() ?: error("unexpected no track")
         trackLiveData.value = trackData
+        isFavoriteTrackLiveData.value = trackData.isFavorite
         preparePlayer()
     }
 
@@ -89,6 +96,19 @@ class AudioPlayerViewModel(
                 playerStateLiveData.value =
                     getCurrentPlayerState().copy(timeMillis = playbackMillis)
                 delay(TIME_INTERVAL)
+            }
+        }
+    }
+
+    fun onFavoriteClicked() {
+        val track = trackLiveData.value ?: return
+        viewModelScope.launch {
+            if (isFavoriteTrackLiveData.value == true) {
+                clearFavoriteTrackUseCase.execute(track)
+                isFavoriteTrackLiveData.postValue(false)
+            } else {
+                addFavoriteTrackUseCase.execute(track)
+                isFavoriteTrackLiveData.postValue(true)
             }
         }
     }

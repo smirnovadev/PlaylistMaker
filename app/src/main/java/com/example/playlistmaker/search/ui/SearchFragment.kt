@@ -20,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    private  var _binding: FragmentSearchBinding? = null
+    private var _binding: FragmentSearchBinding? = null
     private val binding
         get() = _binding!!
 
@@ -49,6 +49,7 @@ class SearchFragment : Fragment() {
             when (searchState) {
                 is SearchState.Loading -> showLoading()
                 is SearchState.Content -> showContent(searchState.tracks)
+                is SearchState.Empty -> showEmpty()
                 is SearchState.Error -> showError()
                 is SearchState.History -> showHistory(searchState.tracks)
             }
@@ -163,17 +164,21 @@ class SearchFragment : Fragment() {
         historyAdapter.notifyDataSetChanged()
     }
 
-    private fun showContent(tracks: List<Track>?) {
+    private fun showContent(tracks: List<Track>) {
         trackList.clear()
-        if (tracks?.isNotEmpty() == true) {
-            binding.emptyContainer.visibility = View.GONE
-            binding.searchRecycler.visibility = View.VISIBLE
-            trackList.addAll(tracks)
-            searchAdapter.notifyDataSetChanged()
-        } else {
-            binding.emptyContainer.visibility = View.VISIBLE
-            binding.searchRecycler.visibility = View.GONE
-        }
+        trackList.addAll(tracks)
+        searchAdapter.notifyDataSetChanged()
+
+        binding.emptyContainer.visibility = View.GONE
+        binding.searchRecycler.visibility = View.VISIBLE
+        binding.errorContainer.visibility = View.GONE
+        binding.historyContainer.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showEmpty() {
+        binding.emptyContainer.visibility = View.VISIBLE
+        binding.searchRecycler.visibility = View.GONE
         binding.errorContainer.visibility = View.GONE
         binding.historyContainer.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
@@ -197,6 +202,5 @@ class SearchFragment : Fragment() {
 
     companion object {
         const val DEFAULT_TEXT = ""
-        const val CLICK_DEBOUNCE_DELAY = 2000L
     }
 }

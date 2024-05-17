@@ -17,6 +17,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var binding: AudioPlayerBinding
     private val viewModel: AudioPlayerViewModel by viewModel()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = AudioPlayerBinding.inflate(layoutInflater)
@@ -25,6 +26,25 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.getTrackLiveData().observe(this) { track ->
             showTrackData(track)
         }
+
+
+        val addToFavoritesButton =  binding.addToFavorites
+
+        viewModel.getFavoriteTrackLiveDaya().observe(this) {favoriteTrack ->
+            addToFavoritesButton.setBackgroundResource(
+                if (favoriteTrack) {
+                    R.drawable.ic_favorites_button
+                } else {
+                    R.drawable.ic_add_to_favorites
+                }
+            )
+
+        }
+
+        addToFavoritesButton.setOnClickListener {
+           viewModel.onFavoriteClicked()
+        }
+
 
         viewModel.getPlayerStateLiveData().observe(this) { playerState ->
             binding.playbackButton.setBackgroundResource(

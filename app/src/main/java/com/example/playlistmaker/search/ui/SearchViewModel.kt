@@ -12,6 +12,7 @@ import com.example.playlistmaker.search.domain.api.SaveTrackToHistoryUseCase
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -28,7 +29,7 @@ class SearchViewModel(
     fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
 
     fun saveTrackToHistory(track: Track) {
-        saveTrackToHistoryUseCase.execute(track)
+        viewModelScope.launch { saveTrackToHistoryUseCase.execute(track).collect() }
     }
 
     fun updateUserText(text: String) {
@@ -43,18 +44,26 @@ class SearchViewModel(
         viewModelScope.launch {
             getTrackSearchQueryUseCase.execute(text)
                 .collect { tracks ->
-                    if (!tracks.isNullOrEmpty()) {
-                        searchStateLiveData.value = SearchState.Content(tracks)
+                    searchStateLiveData.value = if (tracks != null) {
+                        if (tracks.isEmpty()) {
+                            SearchState.Empty
+                        } else {
+                            SearchState.Content(tracks)
+                        }
                     } else {
-                        searchStateLiveData.value = SearchState.Error
+                        SearchState.Error
                     }
                 }
         }
     }
 
     fun loadHistoryData() {
-        val tracks = getTrackHistoryUseCase.execute()
-        searchStateLiveData.value = SearchState.History(tracks)
+        viewModelScope.launch {
+            getTrackHistoryUseCase.execute().collect { tracks ->
+                searchStateLiveData.value = SearchState.History(tracks)
+            }
+        }
+
     }
 
     fun saveTrackToCache(trackData: Track) {
@@ -77,7 +86,7 @@ class SearchViewModel(
         if (isClickAllowed) {
             isClickAllowed = false
             viewModelScope.launch {
-                delay(SearchFragment.CLICK_DEBOUNCE_DELAY)
+                delay(CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
             }
         }
@@ -87,12 +96,13 @@ class SearchViewModel(
     fun searchDebounce() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(SearchFragment.CLICK_DEBOUNCE_DELAY)
+            delay(CLICK_DEBOUNCE_DELAY)
             searchRunnable.run()
         }
     }
 
     companion object {
         const val DEFAULT_TEXT = ""
+        const val CLICK_DEBOUNCE_DELAY = 2000L
     }
 }
