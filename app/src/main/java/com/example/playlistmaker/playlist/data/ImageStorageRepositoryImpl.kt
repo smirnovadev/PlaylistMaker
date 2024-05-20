@@ -6,13 +6,15 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import com.example.playlistmaker.playlist.domain.ImageStorageRepository
+import com.example.playlistmaker.playlist.domain.model.DomainImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class ImageStorageRepositoryImpl(private val context: Context): ImageStorageRepository {
-    override suspend fun saveImageToPrivateStorage(uri: Uri): String = withContext(Dispatchers.IO) {
+class ImageStorageRepositoryImpl(private val context: Context) : ImageStorageRepository {
+    override suspend fun saveImageToPrivateStorage(image: DomainImage): String = withContext(Dispatchers.IO) {
+        val uri = Uri.parse(image.uriString)
         val albumName = "myalbum"
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), albumName)
         if (!filePath.exists()) {

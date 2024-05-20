@@ -39,7 +39,7 @@ class AudioPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = PlaylistAdapter()
+        val adapter = ListPlaylistAdapter()
         adapter.setOnClickListener { playlist ->
             viewModel.addTrackToPlaylist(playlist)
             Timber.tag("mylog").v("playlist Clicked!")

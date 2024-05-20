@@ -100,4 +100,13 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="DialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+    </style>
+    <style name="MyAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/DialogButtonStyle</item>
+    </style>
+
 </resources>

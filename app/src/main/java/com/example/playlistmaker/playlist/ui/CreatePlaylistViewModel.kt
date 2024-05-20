@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.db.entity.domain.SavePlaylistUseCase
 import com.example.playlistmaker.playlist.domain.SaveImageToPrivateStorageUseCase
+import com.example.playlistmaker.playlist.domain.model.DomainImage
 import com.example.playlistmaker.playlist.domain.model.Playlist
 import kotlinx.coroutines.launch
 
@@ -20,7 +21,8 @@ class CreatePlaylistViewModel(
 
     fun saveCoverArt(uri: Uri) {
         viewModelScope.launch {
-            val coverArtPath = saveImageToPrivateStorageUseCase.execute(uri)
+            val domainImage = DomainImage(uri.toString())
+            val coverArtPath = saveImageToPrivateStorageUseCase.execute(domainImage)
             coverArtPathLiveData.value = coverArtPath
         }
     }

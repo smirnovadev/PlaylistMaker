@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -46,6 +47,9 @@ class CreatePlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBackPressHandler()
+        val bottomNavigationView =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.visibility = View.GONE
 
         val descriptionText = binding.descriptionText
         val nameText = binding.nameText
@@ -114,6 +118,14 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        val bottomNavigationView =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.visibility = View.VISIBLE
+    }
+
     private fun updateEditTextUI(editText: EditText, associatedText: TextView, view: View) {
         val defaultBackground =
             ContextCompat.getDrawable(requireContext(), R.drawable.unfocused_edit_tex_playllist)
@@ -155,7 +167,7 @@ class CreatePlaylistFragment : Fragment() {
     }
 
     private fun showDialog() {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(),  R.style.MyAlertDialogTheme)
             .setTitle(R.string.dialog_title)
             .setMessage(R.string.dialog_message)
             .setPositiveButton(R.string.dialog_positive_button) { dialog, which ->

@@ -10,7 +10,7 @@ import com.example.playlistmaker.databinding.ItemPlaylistBinding
 import com.example.playlistmaker.playlist.domain.model.Playlist
 import java.io.File
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
+class GridPlaylistAdapter : RecyclerView.Adapter<GridPlaylistAdapter.ViewHolder>() {
     var playlists = ArrayList<Playlist>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

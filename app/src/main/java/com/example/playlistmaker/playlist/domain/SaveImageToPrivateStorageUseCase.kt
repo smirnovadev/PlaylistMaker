@@ -1,8 +1,8 @@
 package com.example.playlistmaker.playlist.domain
 
-import android.net.Uri
+import com.example.playlistmaker.playlist.domain.model.DomainImage
 
 interface SaveImageToPrivateStorageUseCase {
-    suspend fun execute(uri: Uri): String
+    suspend fun execute(image: DomainImage): String
 
 }

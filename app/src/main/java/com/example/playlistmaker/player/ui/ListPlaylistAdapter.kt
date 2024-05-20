@@ -10,7 +10,7 @@ import com.example.playlistmaker.databinding.ItemAudioplayerPlaylistBinding
 import com.example.playlistmaker.playlist.domain.model.Playlist
 import java.io.File
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
+class ListPlaylistAdapter : RecyclerView.Adapter<ListPlaylistAdapter.ViewHolder>() {
     var playlists = ArrayList<Playlist>()
     private var onClickListener: ((Playlist) -> Unit)? = null
     fun setOnClickListener(onClickAction: (Playlist) -> Unit) {

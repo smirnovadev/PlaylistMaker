@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.playlist.domain.model.Playlist
-import com.example.playlistmaker.playlist.ui.PlaylistAdapter
+import com.example.playlistmaker.playlist.ui.GridPlaylistAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : Fragment() {
-    private lateinit var playlistAdapter: PlaylistAdapter
+    private lateinit var playlistAdapter: GridPlaylistAdapter
     private val viewModel: PlaylistViewModel by viewModel()
 
     private var _binding: FragmentPlaylistBinding? = null
@@ -46,7 +46,7 @@ class PlaylistFragment : Fragment() {
         }
         val recyclerView = binding.recyclerViewPlaylist
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        playlistAdapter = PlaylistAdapter()
+        playlistAdapter = GridPlaylistAdapter()
         recyclerView.adapter = playlistAdapter
     }
     override fun onDestroyView() {
