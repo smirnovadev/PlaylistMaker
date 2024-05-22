@@ -61,5 +61,5 @@
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/newPlaylistButton"
         tools:itemCount="1"
-        tools:listitem="@layout/item_playlist" />
+        tools:listitem="@layout/item_grid_playlist" />
 </androidx.constraintlayout.widget.ConstraintLayout>

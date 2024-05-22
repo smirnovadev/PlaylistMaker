@@ -44,12 +44,24 @@ class CreatePlaylistFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initBackPressHandler()
+    override fun onStart() {
+        super.onStart()
         val bottomNavigationView =
             requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.visibility = View.GONE
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val bottomNavigationView =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.visibility = View.VISIBLE
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initBackPressHandler()
+
 
         val descriptionText = binding.descriptionText
         val nameText = binding.nameText
@@ -121,9 +133,7 @@ class CreatePlaylistFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        val bottomNavigationView =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNavigationView.visibility = View.VISIBLE
+
     }
 
     private fun updateEditTextUI(editText: EditText, associatedText: TextView, view: View) {
