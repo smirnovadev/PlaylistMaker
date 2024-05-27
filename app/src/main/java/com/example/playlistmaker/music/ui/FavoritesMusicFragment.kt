@@ -63,7 +63,7 @@ class FavoritesMusicFragment : Fragment() {
 
     private fun navigateToAudioPlayerActivity(trackData: Track) {
         favoritesMusicViewModel.saveTrackToCache(trackData)
-        findNavController().navigate(R.id.action_musicFragment_to_audioPlayerActivity)
+        findNavController().navigate(R.id.action_musicFragment_to_audioPlayerFragment)
     }
 
 

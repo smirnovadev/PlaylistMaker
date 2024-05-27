@@ -1,8 +1,13 @@
+import com.example.playlistmaker.db.entity.PlaylistConverter
 import com.example.playlistmaker.db.entity.TrackDbConvertor
 import com.example.playlistmaker.db.entity.data.db.FavoritesTrackRepositoryImpl
-import com.example.playlistmaker.db.entity.domain.db.FavoritesTrackRepository
+import com.example.playlistmaker.db.entity.data.db.PlaylistRepositoryImpl
+import com.example.playlistmaker.db.entity.domain.FavoritesTrackRepository
+import com.example.playlistmaker.db.entity.domain.PlaylistRepository
 import com.example.playlistmaker.player.data.TrackCacheRepositoryImpl
 import com.example.playlistmaker.player.domain.TrackCacheRepository
+import com.example.playlistmaker.playlist.data.ImageStorageRepositoryImpl
+import com.example.playlistmaker.playlist.domain.ImageStorageRepository
 import com.example.playlistmaker.search.data.SearchTrackRepositoryImpl
 import com.example.playlistmaker.search.data.TrackHistoryRepositoryImpl
 import com.example.playlistmaker.search.domain.api.SearchHistoryRepository
@@ -30,6 +35,14 @@ val repositoryModule = module {
     single<FavoritesTrackRepository> {
         FavoritesTrackRepositoryImpl(get(), get())
     }
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get(), get())
+    }
 
+    single<ImageStorageRepository> {
+        ImageStorageRepositoryImpl(get())
+    }
     single { TrackDbConvertor() }
+
+    single { PlaylistConverter() }
 }

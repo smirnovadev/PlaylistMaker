@@ -131,7 +131,7 @@ class SearchFragment : Fragment() {
 
     private fun navigateToAudioPlayerActivity(trackData: Track) {
         viewModel.saveTrackToCache(trackData)
-        findNavController().navigate(R.id.action_searchFragment_to_audioPlayerActivity)
+        findNavController().navigate(R.id.action_searchFragment_to_audioPlayerFragment)
     }
 
     private fun hideKeyboard(view: View) {

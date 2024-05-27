@@ -1,8 +1,9 @@
-package com.example.playlistmaker.db.entity.domain.db.impl
+package com.example.playlistmaker.db.entity.domain.impl
 
-import com.example.playlistmaker.db.entity.domain.db.AddFavoriteTrackUseCase
-import com.example.playlistmaker.db.entity.domain.db.FavoritesTrackRepository
+import com.example.playlistmaker.db.entity.domain.AddFavoriteTrackUseCase
+import com.example.playlistmaker.db.entity.domain.FavoritesTrackRepository
 import com.example.playlistmaker.search.domain.model.Track
+
 
 class AddFavoriteTrackUseCaseImpl(private val favoritesTrackRepository: FavoritesTrackRepository)
     : AddFavoriteTrackUseCase {
