@@ -21,5 +21,6 @@
     <color name="colorOnSecondary">@color/gray</color>
     <color name="colorOnBackground">@color/light_gray</color>
     <color name="colorBackground">@color/white</color>
+    <color name="playlist_screen_background">#E6E8EB</color>
 
 </resources>

@@ -4,16 +4,16 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.playlistmaker.db.entity.dao.FavoriteTracksDao
 import com.example.playlistmaker.db.entity.dao.PlaylistDao
-import com.example.playlistmaker.db.entity.dao.TrackDao
 import com.example.playlistmaker.db.entity.dao.TracksForPlaylistDao
 
 @Database(
     version = 4,
-    entities = [TrackEntity::class, PlaylistEntity::class, TracksForPlaylistEntity::class]
+    entities = [FavoriteTrackEntity::class, PlaylistEntity::class, TracksForPlaylistEntity::class]
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun trackDao(): TrackDao
+    abstract fun trackDao(): FavoriteTracksDao
     abstract fun playlistDao(): PlaylistDao
     abstract fun tracksForPlaylistDao(): TracksForPlaylistDao
 

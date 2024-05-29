@@ -38,7 +38,6 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val adapter = ListPlaylistAdapter()
         adapter.setOnClickListener { playlist ->
             viewModel.addTrackToPlaylist(playlist)
@@ -180,6 +179,7 @@ class AudioPlayerFragment : Fragment() {
             binding.album.text = track.collectionName
         }
     }
+
     override fun onStart() {
         super.onStart()
         val bottomNavigationView =

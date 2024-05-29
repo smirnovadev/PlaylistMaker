@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.createPlaylist.domain.model.Playlist
 import com.example.playlistmaker.db.entity.domain.AddFavoriteTrackUseCase
 import com.example.playlistmaker.db.entity.domain.AddTrackToPlaylistUseCase
 import com.example.playlistmaker.db.entity.domain.ClearFavoriteTrackUseCase
 import com.example.playlistmaker.db.entity.domain.GetAllPlaylistUseCase
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCase
-import com.example.playlistmaker.playlist.domain.model.Playlist
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -135,7 +135,7 @@ class AudioPlayerViewModel(
 
     fun addTrackToPlaylist(playlist: Playlist) {
         val track = trackLiveData.value ?: error("track not found")
-        if (playlist.tracksId.contains(track.trackId)) {
+        if (playlist.trackIdList.contains(track.trackId)) {
             Timber.d("Track already exists in playlist")
             trackAddedStateLiveData.value = TrackAddedState.Fail(playlist)
         } else {

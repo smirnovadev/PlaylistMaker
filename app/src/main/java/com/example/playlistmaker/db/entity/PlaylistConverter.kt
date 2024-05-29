@@ -1,7 +1,7 @@
 package com.example.playlistmaker.db.entity
 
 import androidx.room.TypeConverter
-import com.example.playlistmaker.playlist.domain.model.Playlist
+import com.example.playlistmaker.createPlaylist.domain.model.Playlist
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -24,7 +24,7 @@ class PlaylistConverter {
             playlistName = playlist.playlistName,
             descriptionPlaylist = playlist.description,
             coverArtPath = playlist.coverArtPath,
-            tracksId = fromTrackIdList(playlist.tracksId),
+            trackIdList = fromTrackIdList(playlist.trackIdList),
             numberTracks = playlist.numberTracks
         )
     }
@@ -35,7 +35,7 @@ class PlaylistConverter {
             playlistName = playlist.playlistName,
             description = playlist.descriptionPlaylist,
             coverArtPath = playlist.coverArtPath,
-            tracksId = toTrackIdList(playlist.tracksId),
+            trackIdList = toTrackIdList(playlist.trackIdList),
             numberTracks = playlist.numberTracks
         )
     }

@@ -3,16 +3,15 @@ package com.example.playlistmaker.search.data.mapper
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.model.Track
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.Locale
 
-class TrackMapper {
-    private val formatter = SimpleDateFormat("mm:ss", Locale.getDefault())
+class TrackMapper(
+    private val trackTimeFormatter: TrackTimeFormatter
+) {
     fun map(dto: TrackDto): Track {
-        val formattedDuration = formatter.format(dto.trackTimeMillis)
+        val formattedDuration = trackTimeFormatter.formatToString(dto.trackTimeMillis)
         val releaseYear: String = try {
             LocalDate.parse(dto.releaseDate, DateTimeFormatter.ISO_DATE_TIME).year.toString()
         } catch (e: DateTimeParseException) {
