@@ -13,10 +13,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.createPlaylist.domain.model.Playlist
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,7 +34,9 @@ class CreatePlaylistFragment : Fragment() {
     private var _binding: FragmentNewPlaylistBinding? = null
     private var isImageLoaded = false
 
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
+    private var onBackPressedCallback: OnBackPressedCallback? = null
+
+    private var mode: Mode = Mode.CREATE
 
     private val nameEditText get() = binding.nameEditText
     private val descriptionEditText get() = binding.descriptionEditText
@@ -60,24 +65,58 @@ class CreatePlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initBackPressHandler()
-
 
         val descriptionText = binding.descriptionText
         val nameText = binding.nameText
         binding.createButton.isEnabled = false
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+
+        val playlistId = requireArguments().getLong(KEY_PLAYLIST)
+        mode = if (playlistId != 0L)  {
+             Mode.EDIT
+        } else {
+             Mode.CREATE
+        }
+
+        if (mode == Mode.EDIT) {
+            binding.toolbar.setTitle(R.string.editTitle)
+            binding.createButton.setText(R.string.save)
+
+            binding.toolbar.setOnClickListener {
+                findNavController().popBackStack()
+            }
+        } else {
+            binding.toolbar.setTitle(R.string.newPlaylist)
+            binding.createButton.setText(R.string.create)
+
+            initBackPressHandler()
+            binding.toolbar.setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
 
         binding.createButton.setOnClickListener {
-            viewModel.savePlaylist()
-            Toast.makeText(
-                requireContext(), "Плейлист '${nameEditText.text}' создан ",
-                Toast.LENGTH_SHORT
-            ).show()
-            onBackPressedCallback.isEnabled = false
-            findNavController().popBackStack()
+            if (mode == Mode.EDIT) {
+                viewModel.getPlaylistLiveData().observe(viewLifecycleOwner) { playlist ->
+                    viewModel.updatePlaylist(playlist)
+                    findNavController().popBackStack()
+                }
+            } else {
+                viewModel.createPlaylist()
+                Toast.makeText(
+                    requireContext(), "Плейлист '${nameEditText.text}' создан ",
+                    Toast.LENGTH_SHORT
+                ).show()
+                onBackPressedCallback?.isEnabled = false
+                findNavController().popBackStack()
+
+            }
+        }
+
+        if (mode == Mode.EDIT) {
+            viewModel.loadPlaylist(playlistId)
+            viewModel.getPlaylistLiveData().observe(viewLifecycleOwner) { playlist ->
+                showPlaylist(playlist)
+            }
         }
 
 
@@ -124,7 +163,8 @@ class CreatePlaylistFragment : Fragment() {
             if (hasFocus) {
                 descriptionEditText.hint = ""
             } else {
-                descriptionEditText.hint = requireActivity().resources.getString(R.string.description_hint)
+                descriptionEditText.hint =
+                    requireActivity().resources.getString(R.string.description_hint)
             }
             updateEditTextUI(descriptionEditText, descriptionText, v)
         }
@@ -156,7 +196,7 @@ class CreatePlaylistFragment : Fragment() {
         val hasTextOrImage = !nameEditText.text.isNullOrEmpty() ||
                 !descriptionEditText.text.isNullOrEmpty() ||
                 isImageLoaded
-        onBackPressedCallback.isEnabled = hasTextOrImage
+        onBackPressedCallback?.isEnabled = hasTextOrImage
     }
 
     private fun initBackPressHandler() {
@@ -165,19 +205,19 @@ class CreatePlaylistFragment : Fragment() {
                 hideKeyboard()
                 showDialog()
             }
+        }.also {
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, it)
         }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            onBackPressedCallback
-        )
     }
+
     private fun hideKeyboard() {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
     private fun showDialog() {
-        MaterialAlertDialogBuilder(requireContext(),  R.style.MyAlertDialogTheme)
+        MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
             .setTitle(R.string.dialog_title)
             .setMessage(R.string.dialog_message)
             .setPositiveButton(R.string.dialog_positive_button) { dialog, which ->
@@ -187,5 +227,27 @@ class CreatePlaylistFragment : Fragment() {
                 dialog.dismiss()
             }
             .show()
+    }
+
+
+    private fun showPlaylist(playlist: Playlist) {
+        Glide.with(requireActivity())
+            .load(playlist.coverArtPath)
+            .centerCrop()
+            .placeholder(R.drawable.track_placeholder_45)
+            .into(binding.playlistCover)
+        binding.nameEditText.setText(playlist.playlistName)
+        binding.descriptionEditText.setText(playlist.description)
+        binding.coverPlaceholder.visibility = View.GONE
+
+    }
+
+    companion object {
+        private const val KEY_PLAYLIST = "id_playlist"
+        fun createArgs(playlistId: Long? = null): Bundle {
+            return bundleOf(
+                KEY_PLAYLIST to (playlistId ?: 0L),
+            )
+        }
     }
 }

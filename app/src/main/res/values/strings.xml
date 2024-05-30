@@ -38,6 +38,7 @@
     <string name="favorites_track">Избранные треки</string>
     <string name="playlist">Плейлисты</string>
     <string name="newPlaylist">Новый плейлист</string>
+    <string name="editTitle">Редактировать</string>
     <string name="name_hint">Название*</string>
     <string name="description_hint">Описание</string>
     <string name="create">Создать</string>
@@ -55,6 +56,8 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="do_you_want_to_delete_playlist">Хотите удалить плейлист %1$s?</string>
+    <string name="toast_empty_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="save">Сохранить</string>
 
 
     <plurals name="tracks">

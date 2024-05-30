@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.createPlaylist.domain.model.Playlist
+import com.example.playlistmaker.createPlaylist.ui.CreatePlaylistFragment
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.TrackAdapter
@@ -87,6 +88,13 @@ class PlaylistFragment : Fragment() {
             overlay.visibility = View.VISIBLE
         }
 
+        binding.editInformationMenuBottomSheet.setOnClickListener {
+            val playlistScreenState = viewModel.getPlaylistScreenStateLiveData().value
+            playlistScreenState?.let { state ->
+                navigateToCreatePlaylist(state.playlist)
+            }
+        }
+
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -94,7 +102,7 @@ class PlaylistFragment : Fragment() {
 
         binding.deletePlaylistMenuBottomSheet.setOnClickListener {
             val playlistScreenState = viewModel.getPlaylistScreenStateLiveData().value
-            playlistScreenState?.let{ state ->
+            playlistScreenState?.let { state ->
                 showDialogToDeletePlaylist(state.playlist)
             }
 
@@ -128,6 +136,12 @@ class PlaylistFragment : Fragment() {
         viewModel.saveTrackToCashe(track)
     }
 
+    private fun navigateToCreatePlaylist(playlist: Playlist) {
+        findNavController().navigate(R.id.action_playlistFragment_to_createdPlaylistFragment,
+            CreatePlaylistFragment.createArgs(playlist.playlistId)
+        )
+    }
+
     private fun showContent(state: PlaylistScreenState.Content) {
         binding.emptyRecycler.visibility = View.GONE
         binding.playlistsBottomSheetRecycler.visibility = View.VISIBLE
@@ -145,6 +159,7 @@ class PlaylistFragment : Fragment() {
         }
         binding.shareMenuBottomSheet.setOnClickListener {
             sharePlaylist(state)
+
         }
     }
 
@@ -158,6 +173,8 @@ class PlaylistFragment : Fragment() {
         shareIntent.type = "text/plain"
         shareIntent.putExtra(Intent.EXTRA_TEXT, message)
         startActivity(shareIntent)
+        binding.menuBottomSheet.visibility = View.GONE
+        binding.overlay.visibility = View.GONE
     }
 
     private fun showEmpty(state: PlaylistScreenState.Empty) {
@@ -177,9 +194,11 @@ class PlaylistFragment : Fragment() {
 
     private fun makeToastForEmptyPlaylist() {
         Toast.makeText(
-            requireContext(), "В этом плейлисте нет списка треков, которым можно поделиться",
+            requireContext(), getString(R.string.toast_empty_playlist),
             Toast.LENGTH_SHORT
         ).show()
+        binding.menuBottomSheet.visibility = View.GONE
+        binding.overlay.visibility = View.GONE
     }
 
     private fun showTracksDurationAndCount(totalMinutes: Long, tracksCount: Int) {
@@ -213,6 +232,7 @@ class PlaylistFragment : Fragment() {
 
         binding.playlistName.text = playlist.playlistName
     }
+
     private fun showDialogToDeletePlaylist(playlist: Playlist) {
         MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialogTheme)
             .setTitle(getString(R.string.do_you_want_to_delete_playlist, playlist.playlistName))
@@ -289,6 +309,4 @@ class PlaylistFragment : Fragment() {
             )
         }
     }
-
-
 }

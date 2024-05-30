@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.createPlaylist.domain.model.Playlist
+import com.example.playlistmaker.createPlaylist.ui.CreatePlaylistFragment
 import com.example.playlistmaker.databinding.FragmentAllPlaylistBinding
 import com.example.playlistmaker.playlist.ui.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,7 +37,10 @@ class AllPlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(R.id.action_musicFragment_to_createdPlaylistFragment)
+            findNavController().navigate(
+                R.id.action_musicFragment_to_createdPlaylistFragment,
+                CreatePlaylistFragment.createArgs()
+            )
         }
 
         viewModel.getPlaylistTrackLiveData().observe(viewLifecycleOwner) {
@@ -73,7 +77,8 @@ class AllPlaylistsFragment : Fragment() {
     }
 
     private fun navigateToPlaylist(playlist: Playlist) {
-        findNavController().navigate(R.id.action_musicFragment_to_playlistFragment,
+        findNavController().navigate(
+            R.id.action_musicFragment_to_playlistFragment,
             PlaylistFragment.createArgs(playlist.playlistId)
         )
     }

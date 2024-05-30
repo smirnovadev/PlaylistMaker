@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.playlistmaker.db.entity.PlaylistEntity
 
 @Dao
@@ -20,5 +21,8 @@ interface PlaylistDao {
 
     @Delete
     suspend fun deletePlaylist(playlistEntity: PlaylistEntity)
+
+    @Update
+    suspend fun updatePlaylist(playlist: PlaylistEntity)
 
 }

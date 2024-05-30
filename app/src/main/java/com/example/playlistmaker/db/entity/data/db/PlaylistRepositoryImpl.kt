@@ -95,7 +95,6 @@ class PlaylistRepositoryImpl
         }
     }
 
-
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
         return playlists.map { playlist ->
             playlistDbConverter.map(playlist)
