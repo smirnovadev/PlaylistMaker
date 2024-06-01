@@ -307,7 +307,7 @@
             android:text="@string/newPlaylist" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/playlistyRecycler"
+            android:id="@+id/playlist_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

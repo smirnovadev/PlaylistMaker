@@ -28,7 +28,7 @@ class PlaylistRepositoryImpl
 
     override suspend fun addTrackForPlaylist(track: Track, playlist: Playlist) {
         val trackIds = playlist.trackIdList.toMutableList()
-        trackIds.add(track.trackId)
+        trackIds.add(0, track.trackId)
         val newPlaylist = playlist.copy(
             trackIdList = trackIds,
             numberTracks = playlist.numberTracks + 1
@@ -48,6 +48,7 @@ class PlaylistRepositoryImpl
             appDataBase.tracksForPlaylistDao()
                 .getAllTracksForPlaylist()
                 .filter { playlistTrackIds.contains(it.trackId) }
+                .sortedBy { playlistTrackIds.indexOf(it.trackId) }
                 .map { trackDbConvertor.mapToTrack(it) }
                 .also { emit(it) }
         }

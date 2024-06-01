@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -30,6 +31,12 @@ class PlaylistFragment : Fragment() {
     private lateinit var trackAdapter: TrackAdapter
 
     private val viewModel: PlaylistViewModel by viewModel()
+
+    private lateinit var dialogView: View
+    private lateinit var messageTextView: TextView
+    private lateinit var positiveButton: TextView
+    private lateinit var negativeButton: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -129,6 +136,10 @@ class PlaylistFragment : Fragment() {
             showDialogToDeleteTrack(track.trackId)
         }
 
+        dialogView = layoutInflater.inflate(R.layout.dialog_playlist_fragment, null)
+        messageTextView = dialogView.findViewById(R.id.dialog_message)
+        positiveButton = dialogView.findViewById(R.id.positive_button)
+        negativeButton = dialogView.findViewById(R.id.negative_button)
     }
 
     private fun navigateToAudioPlayer(track: Track) {
@@ -234,28 +245,42 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun showDialogToDeletePlaylist(playlist: Playlist) {
-        MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialogTheme)
-            .setTitle(getString(R.string.do_you_want_to_delete_playlist, playlist.playlistName))
-            .setPositiveButton(R.string.yes) { dialog, which ->
-                viewModel.deletePlaylist()
-                findNavController().popBackStack()
-            }
-            .setNeutralButton(R.string.no) { dialog, which ->
-                dialog.dismiss()
-            }
-            .show()
+        messageTextView.text = getString(R.string.do_you_want_to_delete_playlist, playlist.playlistName)
+
+        val alertDialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        positiveButton.setOnClickListener {
+            viewModel.deletePlaylist()
+            findNavController().popBackStack()
+            alertDialog.dismiss()
+        }
+
+        negativeButton.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     private fun showDialogToDeleteTrack(trackId: Long) {
-        MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialogTheme)
-            .setTitle(getString(R.string.do_you_want_to_delete_track))
-            .setPositiveButton(getString(R.string.yes)) { dialog, which ->
-                viewModel.deleteTrackForId(trackId)
-            }
-            .setNeutralButton(getString(R.string.no)) { dialog, which ->
-                dialog.dismiss()
-            }
-            .show()
+        messageTextView.text = getString(R.string.do_you_want_to_delete_track)
+
+        val alertDialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        positiveButton.setOnClickListener {
+            viewModel.deleteTrackForId(trackId)
+            alertDialog.dismiss()
+        }
+
+        negativeButton.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     private fun createPlaylistMessage(

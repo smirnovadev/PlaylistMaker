@@ -113,20 +113,5 @@
         <item name="buttonBarNeutralButtonStyle">@style/DialogButtonStyle</item>
     </style>
 
-    <style name="CustomAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:background">@color/white</item>
-        <item name="buttonBarPositiveButtonStyle">@style/CustomDialogButton.Positive</item>
-        <item name="buttonBarNeutralButtonStyle">@style/CustomDialogButton.Neutral</item>
-    </style>
-
-
-    <style name="CustomDialogButton.Positive" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/sky_blue</item>
-    </style>
-
-
-    <style name="CustomDialogButton.Neutral" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/sky_blue</item>
-    </style>
 
 </resources>

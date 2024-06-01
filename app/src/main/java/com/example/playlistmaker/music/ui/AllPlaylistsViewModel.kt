@@ -16,13 +16,13 @@ class AllPlaylistsViewModel(
 
     fun getAllPlaylist() {
         viewModelScope.launch {
-            getAllPlaylistUseCase.execute()
-                .collect { playlist ->
-                    if (playlist.isEmpty()) {
-                        playlistTrackLiveData.postValue(AllPlaylistsState.Empty)
-                    } else {
-                        playlistTrackLiveData.postValue(AllPlaylistsState.Content(playlist))
-                    } }
+            getAllPlaylistUseCase.execute().collect { playlist ->
+                if (playlist.isEmpty()) {
+                    playlistTrackLiveData.postValue(AllPlaylistsState.Empty)
+                } else {
+                    playlistTrackLiveData.postValue(AllPlaylistsState.Content(playlist))
+                }
+            }
         }
     }
 }

@@ -44,8 +44,8 @@ class AudioPlayerFragment : Fragment() {
             viewModel.addTrackToPlaylist(playlist)
             Timber.tag("mylog").v("playlist Clicked!")
         }
-        binding.playlistyRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.playlistyRecycler.adapter = adapter
+        binding.playlistRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.playlistRecycler.adapter = adapter
 
         viewModel.loadTrackData()
 

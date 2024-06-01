@@ -9,4 +9,6 @@
     <color name="colorSecondaryVariant">@color/black</color>
     <color name="colorOnSecondary">@color/sky_blue</color>
     <color name="colorBackground">@color/light_black_background</color>
+    <color name="dialog_background">#FFFFFF</color>
+    <color name="black">#FF000000</color>
 </resources>

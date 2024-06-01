@@ -31,7 +31,7 @@ class PlaylistViewModel(
     fun loadPlaylist(playlistId: Long) {
         viewModelScope.launch {
             getPlaylistByIdUseCase.execute(playlistId).collect { playlist ->
-                getAllTracksForPlaylist(playlist.trackIdList, playlist)
+                getAllTracksForPlaylist(playlist)
             }
         }
     }
@@ -41,9 +41,9 @@ class PlaylistViewModel(
     }
 
 
-    fun getAllTracksForPlaylist(playlistTrackIds: List<Long>, playlist: Playlist) {
+    fun getAllTracksForPlaylist(playlist: Playlist) {
         viewModelScope.launch {
-            getAllTracksForPlaylistUseCase.execute(playlistTrackIds)
+            getAllTracksForPlaylistUseCase.execute(playlist.trackIdList)
                 .collect { tracks ->
                     if (tracks.isEmpty()) {
                         playlistScreenStateLiveData.value = PlaylistScreenState.Empty(
@@ -65,7 +65,7 @@ class PlaylistViewModel(
         viewModelScope.launch {
             deleteTrackFromPlaylistUseCase.execute(trackId, playlist)
                 .collect { updatePlaylist ->
-                    getAllTracksForPlaylist(updatePlaylist.trackIdList, playlist)
+                    getAllTracksForPlaylist(updatePlaylist)
                 }
         }
     }

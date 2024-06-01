@@ -66,7 +66,8 @@ class AudioPlayerViewModel(
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.value = getCurrentPlayerState().copy(timeMillis = 0, isPrepared = true)
+            playerStateLiveData.value =
+                getCurrentPlayerState().copy(timeMillis = 0, isPrepared = true)
         }
         mediaPlayer.setOnCompletionListener {
             timerJob?.cancel()

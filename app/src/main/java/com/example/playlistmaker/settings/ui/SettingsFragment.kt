@@ -50,7 +50,7 @@ class SettingsFragment : Fragment() {
         binding.support.setOnClickListener {
             val message = getString(R.string.message_to_developers)
             val supportIntent = Intent(Intent.ACTION_SENDTO)
-            supportIntent.data = Uri.parse("mailto:")
+            supportIntent.data = Uri.parse(getString(R.string.address_of_the_recipient))
             supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("annaparfenova"))
             supportIntent.putExtra(Intent.EXTRA_TEXT, message)
             supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_subject))

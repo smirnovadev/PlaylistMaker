@@ -9,7 +9,7 @@ import com.example.playlistmaker.db.entity.TracksForPlaylistEntity
 
 @Dao
 interface TracksForPlaylistDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTracksForPlaylist(tracksForPlaylistEntity: TracksForPlaylistEntity)
     @Query("SELECT * FROM tracks_for_playlist_table")
     suspend fun getAllTracksForPlaylist(): List<TracksForPlaylistEntity>
