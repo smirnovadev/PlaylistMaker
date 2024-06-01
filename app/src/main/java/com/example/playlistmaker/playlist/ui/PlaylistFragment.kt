@@ -245,6 +245,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun showDialogToDeletePlaylist(playlist: Playlist) {
+        (dialogView.parent as? ViewGroup)?.removeView(dialogView)
         messageTextView.text = getString(R.string.do_you_want_to_delete_playlist, playlist.playlistName)
 
         val alertDialog = MaterialAlertDialogBuilder(requireContext())
@@ -265,6 +266,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun showDialogToDeleteTrack(trackId: Long) {
+        (dialogView.parent as? ViewGroup)?.removeView(dialogView)
         messageTextView.text = getString(R.string.do_you_want_to_delete_track)
 
         val alertDialog = MaterialAlertDialogBuilder(requireContext())

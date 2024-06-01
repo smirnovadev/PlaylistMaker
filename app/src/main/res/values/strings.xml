@@ -15,7 +15,7 @@
     <string name="offer">https://practicum.yandex.ru/profile/android-developer/</string>
     <string name="clear_text">clear Text</string>
     <string name="message_to_developers">Спасибо разработчикам и разработчицам за крутое приложение!</string>
-    <string name="letter_subject">Сообщение разработчикам и разработчицам за крутое приложение!</string>
+    <string name="letter_subject">Сообщение разработчикам и разработчицам приложения Playlist Make</string>
     <string name="link_to_offer">https://yandex.ru/legal/practicum_offer/</string>
     <string name="format_track_description">%1$s • %2$s</string>
     <string name="go_to_track_content_desc">go to track</string>
@@ -58,7 +58,7 @@
     <string name="do_you_want_to_delete_playlist">Хотите удалить плейлист %1$s?</string>
     <string name="toast_empty_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
     <string name="save">Сохранить</string>
-    <string name="address_of_the_recipient">mailto:annaparfenova@example.com</string>
+    <string name="address_of_the_recipient">annaparfenova@example.com</string>
 
 
     <plurals name="tracks">

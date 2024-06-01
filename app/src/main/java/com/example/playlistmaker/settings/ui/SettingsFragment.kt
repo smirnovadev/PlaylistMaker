@@ -48,14 +48,19 @@ class SettingsFragment : Fragment() {
         }
 
         binding.support.setOnClickListener {
+            val email = getString(R.string.address_of_the_recipient)
+            val subject = getString(R.string.letter_subject)
             val message = getString(R.string.message_to_developers)
-            val supportIntent = Intent(Intent.ACTION_SENDTO)
-            supportIntent.data = Uri.parse(getString(R.string.address_of_the_recipient))
-            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("annaparfenova"))
-            supportIntent.putExtra(Intent.EXTRA_TEXT, message)
-            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_subject))
+
+            val supportIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822"
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+                putExtra(Intent.EXTRA_SUBJECT, subject)
+                putExtra(Intent.EXTRA_TEXT, message)
+            }
             startActivity(supportIntent)
         }
+
 
         binding.agreement.setOnClickListener {
             val url = getString(R.string.link_to_offer)
