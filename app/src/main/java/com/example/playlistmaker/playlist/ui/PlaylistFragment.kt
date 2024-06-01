@@ -247,6 +247,7 @@ class PlaylistFragment : Fragment() {
     private fun showDialogToDeletePlaylist(playlist: Playlist) {
         (dialogView.parent as? ViewGroup)?.removeView(dialogView)
         messageTextView.text = getString(R.string.do_you_want_to_delete_playlist, playlist.playlistName)
+        binding.menuBottomSheet.visibility = View.GONE
 
         val alertDialog = MaterialAlertDialogBuilder(requireContext())
             .setView(dialogView)
@@ -259,6 +260,7 @@ class PlaylistFragment : Fragment() {
         }
 
         negativeButton.setOnClickListener {
+            binding.overlay.visibility = View.GONE
             alertDialog.dismiss()
         }
 
@@ -268,6 +270,7 @@ class PlaylistFragment : Fragment() {
     private fun showDialogToDeleteTrack(trackId: Long) {
         (dialogView.parent as? ViewGroup)?.removeView(dialogView)
         messageTextView.text = getString(R.string.do_you_want_to_delete_track)
+        binding.overlay.visibility = View.VISIBLE
 
         val alertDialog = MaterialAlertDialogBuilder(requireContext())
             .setView(dialogView)
@@ -275,11 +278,13 @@ class PlaylistFragment : Fragment() {
 
         positiveButton.setOnClickListener {
             viewModel.deleteTrackForId(trackId)
+            binding.overlay.visibility = View.GONE
             alertDialog.dismiss()
         }
 
         negativeButton.setOnClickListener {
             alertDialog.dismiss()
+            binding.overlay.visibility = View.GONE
         }
 
         alertDialog.show()

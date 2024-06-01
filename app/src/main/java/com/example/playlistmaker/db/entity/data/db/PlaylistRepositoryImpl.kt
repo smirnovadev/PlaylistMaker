@@ -45,12 +45,20 @@ class PlaylistRepositoryImpl
 
     override suspend fun getAllTracksForPlaylist(playlistTrackIds: List<Long>): Flow<List<Track>> =
         flow {
-            appDataBase.tracksForPlaylistDao()
+            val tracks = appDataBase.tracksForPlaylistDao()
                 .getAllTracksForPlaylist()
                 .filter { playlistTrackIds.contains(it.trackId) }
                 .sortedBy { playlistTrackIds.indexOf(it.trackId) }
                 .map { trackDbConvertor.mapToTrack(it) }
-                .also { emit(it) }
+
+            val favoritesTracksId = appDataBase.trackDao().getAllTrackIds()
+
+            tracks.forEach { track ->
+                if (favoritesTracksId.contains(track.trackId)) {
+                    track.isFavorite = true
+                }
+            }
+            emit(tracks)
         }
 
     override suspend fun deleteTrackFromPlaylist(
