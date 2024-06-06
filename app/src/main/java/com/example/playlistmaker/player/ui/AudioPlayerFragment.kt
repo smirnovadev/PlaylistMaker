@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.createPlaylist.ui.CreatePlaylistFragment
 import com.example.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.example.playlistmaker.search.domain.model.Track
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -38,14 +39,13 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val adapter = ListPlaylistAdapter()
         adapter.setOnClickListener { playlist ->
             viewModel.addTrackToPlaylist(playlist)
             Timber.tag("mylog").v("playlist Clicked!")
         }
-        binding.playlistyRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.playlistyRecycler.adapter = adapter
+        binding.playlistRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.playlistRecycler.adapter = adapter
 
         viewModel.loadTrackData()
 
@@ -128,7 +128,10 @@ class AudioPlayerFragment : Fragment() {
         }
 
         binding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(R.id.action_audioPlayerFragment_to_createdPlaylistFragment)
+            findNavController().navigate(
+                R.id.action_audioPlayerFragment_to_createdPlaylistFragment,
+                CreatePlaylistFragment.createArgs()
+            )
         }
 
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
@@ -180,6 +183,7 @@ class AudioPlayerFragment : Fragment() {
             binding.album.text = track.collectionName
         }
     }
+
     override fun onStart() {
         super.onStart()
         val bottomNavigationView =

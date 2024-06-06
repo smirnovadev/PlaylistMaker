@@ -4,6 +4,7 @@ import androidx.room.Room
 import com.example.playlistmaker.db.entity.AppDatabase
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.mapper.TrackMapper
+import com.example.playlistmaker.search.data.mapper.TrackTimeFormatter
 import com.example.playlistmaker.search.data.network.ItunesApi
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.google.gson.Gson
@@ -31,10 +32,14 @@ val dataModule = module {
 
     factory { Gson() }
 
+    single {
+        TrackMapper(get())
+    }
 
     single {
-        TrackMapper()
+        TrackTimeFormatter()
     }
+
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .addMigrations(AppDatabase.MIGRATION_1_2)

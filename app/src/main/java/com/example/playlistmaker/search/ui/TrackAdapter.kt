@@ -13,6 +13,7 @@ class TrackAdapter(
     private val onClickAction: (Track) -> Unit
 ) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     var trackList = ArrayList<Track>()
+    private var onLongClickAction: (Track) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,6 +28,15 @@ class TrackAdapter(
         holder.itemView.setOnClickListener {
             onClickAction.invoke(trackData)
         }
+
+        holder.itemView.setOnLongClickListener{
+            onLongClickAction.invoke(trackData)
+            true
+        }
+    }
+
+    fun setOnLongClickListener(onClick: (Track) -> Unit) {
+        onLongClickAction = onClick
     }
 
     class TrackViewHolder(private val binding: ItemSearchBinding) :

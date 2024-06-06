@@ -1,19 +1,27 @@
+import com.example.playlistmaker.createPlaylist.domain.SaveImageToPrivateStorageUseCase
+import com.example.playlistmaker.createPlaylist.domain.impl.SaveImageToPrivateStorageUseCaseImpl
 import com.example.playlistmaker.db.entity.domain.AddFavoriteTrackUseCase
 import com.example.playlistmaker.db.entity.domain.AddTrackToPlaylistUseCase
 import com.example.playlistmaker.db.entity.domain.ClearFavoriteTrackUseCase
 import com.example.playlistmaker.db.entity.domain.GetAllFavoriteTrackUseCase
 import com.example.playlistmaker.db.entity.domain.GetAllPlaylistUseCase
+import com.example.playlistmaker.db.entity.domain.GetPlaylistByIdUseCase
 import com.example.playlistmaker.db.entity.domain.SavePlaylistUseCase
 import com.example.playlistmaker.db.entity.domain.impl.AddFavoriteTrackUseCaseImpl
 import com.example.playlistmaker.db.entity.domain.impl.AddTrackToPlaylistUseCaseImpl
 import com.example.playlistmaker.db.entity.domain.impl.ClearFavoriteTrackUseCaseImpl
 import com.example.playlistmaker.db.entity.domain.impl.GetAllFavoriteTrackUseCaseImpl
 import com.example.playlistmaker.db.entity.domain.impl.GetAllPlaylistUseCaseImpl
+import com.example.playlistmaker.db.entity.domain.impl.GetPlaylistByIdUseCaseImpl
 import com.example.playlistmaker.db.entity.domain.impl.SavePlaylistUseCaseImpl
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCase
 import com.example.playlistmaker.player.domain.GetTrackFromCacheUseCaseImpl
-import com.example.playlistmaker.playlist.domain.SaveImageToPrivateStorageUseCase
-import com.example.playlistmaker.playlist.domain.impl.SaveImageToPrivateStorageUseCaseImpl
+import com.example.playlistmaker.playlist.domain.DeletePlaylistUseCase
+import com.example.playlistmaker.playlist.domain.DeleteTrackFromPlaylistUseCase
+import com.example.playlistmaker.playlist.domain.GetAllTracksForPlaylistUseCase
+import com.example.playlistmaker.playlist.domain.impl.DeletePlaylistUseCaseImpl
+import com.example.playlistmaker.playlist.domain.impl.DeleteTrackFromPlaylistUseCaseImpl
+import com.example.playlistmaker.playlist.domain.impl.GetAllTracksForPlaylistUseCaseImpl
 import com.example.playlistmaker.search.domain.api.ClearTrackHistoryUseCase
 import com.example.playlistmaker.search.domain.api.GetTrackHistoryUseCase
 import com.example.playlistmaker.search.domain.api.GetTracksSearchQueryUseCase
@@ -87,6 +95,22 @@ val useCaseModule = module {
 
     single<AddTrackToPlaylistUseCase> {
         AddTrackToPlaylistUseCaseImpl(get())
+    }
+
+    single<GetPlaylistByIdUseCase> {
+        GetPlaylistByIdUseCaseImpl(get())
+    }
+
+    single<GetAllTracksForPlaylistUseCase> {
+        GetAllTracksForPlaylistUseCaseImpl(get())
+    }
+
+    single<DeleteTrackFromPlaylistUseCase> {
+        DeleteTrackFromPlaylistUseCaseImpl(get())
+    }
+
+    single<DeletePlaylistUseCase> {
+        DeletePlaylistUseCaseImpl(get())
     }
 
 }

@@ -1,7 +1,8 @@
+import com.example.playlistmaker.createPlaylist.ui.CreatePlaylistViewModel
+import com.example.playlistmaker.music.ui.AllPlaylistsViewModel
 import com.example.playlistmaker.music.ui.FavoritesMusicViewModel
-import com.example.playlistmaker.music.ui.PlaylistViewModel
 import com.example.playlistmaker.player.ui.AudioPlayerViewModel
-import com.example.playlistmaker.playlist.ui.CreatePlaylistViewModel
+import com.example.playlistmaker.playlist.ui.PlaylistViewModel
 import com.example.playlistmaker.search.ui.SearchViewModel
 import com.example.playlistmaker.settings.ui.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -26,10 +27,13 @@ val viewModel = module {
     }
 
     viewModel {
-        CreatePlaylistViewModel(get(), get())
+        CreatePlaylistViewModel(get(), get(), get())
     }
     viewModel {
-        PlaylistViewModel(get())
+        AllPlaylistsViewModel(get())
+    }
+    viewModel {
+        PlaylistViewModel(get(), get(), get(), get(), get(), get())
     }
 
 }

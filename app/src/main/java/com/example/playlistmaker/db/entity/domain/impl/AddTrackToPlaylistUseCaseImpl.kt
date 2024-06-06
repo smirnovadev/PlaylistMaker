@@ -1,8 +1,8 @@
 package com.example.playlistmaker.db.entity.domain.impl
 
+import com.example.playlistmaker.createPlaylist.domain.model.Playlist
 import com.example.playlistmaker.db.entity.domain.AddTrackToPlaylistUseCase
 import com.example.playlistmaker.db.entity.domain.PlaylistRepository
-import com.example.playlistmaker.playlist.domain.model.Playlist
 import com.example.playlistmaker.search.domain.model.Track
 
 class AddTrackToPlaylistUseCaseImpl(private val playlistRepository: PlaylistRepository): AddTrackToPlaylistUseCase {

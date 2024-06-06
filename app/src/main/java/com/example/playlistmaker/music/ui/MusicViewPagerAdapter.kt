@@ -15,7 +15,7 @@ class MusicViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecyc
     override fun createFragment(position: Int): Fragment {
         return when(position) {
             0 -> FavoritesMusicFragment.newInstance()
-            else  -> PlaylistFragment.newInstance()
+            else  -> AllPlaylistsFragment.newInstance()
         }
     }
 }
