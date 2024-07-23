@@ -23,7 +23,6 @@ class FavoritesTrackRepositoryImpl(
     override suspend fun getAllFavoriteTrack(): Flow<List<Track>> = flow {
         val tracks = appDataBase.trackDao().getTracks()
         emit(convertFromTrackEntity(tracks))
-
     }
 
     private fun convertFromTrackEntity(tracks: List<FavoriteTrackEntity>): List<Track> {

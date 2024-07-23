@@ -16,5 +16,4 @@ interface TracksForPlaylistDao {
     @Delete(entity = TracksForPlaylistEntity::class)
     suspend fun deleteTrack(byTrackId: ByTrackId)
 }
-
 data class ByTrackId(val trackId: Long)
