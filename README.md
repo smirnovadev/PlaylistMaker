@@ -2,11 +2,14 @@
 ## Описание
 Приложение “PlaylistMaker” позволяет искать и прослушивать треки в iTunes, добавлять треки в избранные, а также создавать и редактировать собственные плейлисты. Приложение поддерживает темную тему.
 ## Скриншоты
-![Скриншот 1](images/screenshot1.png)
-![Скриншот 2](images/screenshot2.png)
-![Скриншот 3](images/screenshot3.png)
+<p float="left">
+  <img src="images/screenshot1.png" alt="Скриншот 1" width="300" height="auto" />
+  <img src="images/screenshot2.png" alt="Скриншот 2" width="300" height="auto" /> 
+  <img src="images/screenshot3.png" alt="Скриншот 3" width="300" height="auto" />
+</p>
+
 ## Приобретенный опыт
-В процессе разработки данного проекта я получила ценный опыт в использовании следующих технологий и подходов:
+В процессе разработки данного проекта я получила опыт в использовании следующих технологий и подходов:
 - **Clean Architecture**: Применение принципов чистой архитектуры для разделения приложения на слои.
 - **MVP и MVVM**: Изначально использовала паттерн MVP, затем переписала приложение на MVVM для улучшения поддерживаемости и тестируемости кода.
 - **Retrofit**: Использовала Retrofit для взаимодействия с iTunes API.
@@ -28,7 +31,7 @@ Retrofit,
 Koin,
 Lifecycle ViewModel KTX,
 AppCompat,
-ConstraintLayout,
+ConstraintLayout
 
 ## Требования
 - **IDE**: Android Studio Iguana
